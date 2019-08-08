@@ -8,6 +8,11 @@ use SIASE\Student;
 
 class Login
 {
+    // This query names are kept here and not in Query class because they are different only for Login
+    const ID_QUERY = '108be0d';
+
+    const PASSWORD_QUERY = 'd937aa6b';
+
     /**
      * Attempts to login with the given credentials.
      *
@@ -24,8 +29,8 @@ class Login
         // Sends a GET request to SIASE (Includes discovered properties)
         $response = $client->get(Query::SIASE_ENDPOINT, [
             'query' => [
-                Query::ID => $id,
-                Query::PASSWORD => $password,
+                self::ID_QUERY => $id,
+                self::PASSWORD_QUERY => $password,
                 Query::REQUEST_TYPE => RequestType::LOGIN,
 
                 '0c19de58' => '01', // Undefined property, could be related to 'requesting client party'.
