@@ -5,10 +5,10 @@ namespace SIASE\Exceptions;
 use Exception;
 use Throwable;
 
-class AuthenticationException extends Exception
+class ScheduleException extends Exception
 {
     public function __construct(Throwable $previous = null)
     {
-        parent::__construct('Wrong Credentials', 1, $previous);
+        parent::__construct('Unable to fetch Schedule', 2, $previous);
     }
 }

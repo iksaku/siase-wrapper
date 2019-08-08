@@ -1,10 +1,10 @@
 <?php
 
-namespace SIASE;
+namespace SIASE\Models;
 
 use SimpleXMLElement;
 
-class Student
+class Student extends Model
 {
     /**
      * Represents the Id of the Student (Internally known as 'Matricula').
@@ -53,17 +53,14 @@ class Student
 
     /**
      * @param SimpleXMLElement $data
-     * @param Career|null $career
      * @return Student
      */
-    public static function fromData(SimpleXMLElement $data, Career $career = null)
+    public static function fromData(SimpleXMLElement $data)
     {
-        // If there's no career provided already, build our own model from data
-        if (empty($career)) {
-            $career = Career::fromData($data->ttCarrera);
-        }
+        /** @var Career $career */
+        $career = Career::fromData($data->ttCarrera);
 
-        // Build Student model from data
+        // Build Student model
         return new self(
             (int) $data->pochMatricula,
             (string) $data->pochNombre,

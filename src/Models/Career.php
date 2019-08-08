@@ -1,10 +1,10 @@
 <?php
 
-namespace SIASE;
+namespace SIASE\Models;
 
 use SimpleXMLElement;
 
-class Career
+class Career extends Model
 {
     /**
      * Contains the name of the Career.
@@ -42,14 +42,12 @@ class Career
     }
 
     /**
-     * Creates a new instance from array data (Parsed XML).
-     *
      * @param SimpleXMLElement $data
      * @return Career
      */
     public static function fromData(SimpleXMLElement $data)
     {
-        // Build Career model from data
+        // Build Career model
         return new self(
             (string) $data->ttCarreraRow->DesCarrera,
             (string) $data->ttCarreraRow->Abreviatura,

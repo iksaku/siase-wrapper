@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Queries;
+namespace SIASE\Actions;
 
-class RequestType
+class ActionType
 {
     const LOGIN = 1;
 
