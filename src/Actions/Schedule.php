@@ -27,7 +27,7 @@ class Schedule extends Action
             'query' => [
                 ActionArgument::ID => $student->id,
                 ActionArgument::CAREER_CVE => $student->career->cve,
-                ActionArgument::REQUEST_TYPE => 4,
+                ActionArgument::ACTION_TYPE => ActionType::SCHEDULE,
             ],
         ]);
 

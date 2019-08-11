@@ -8,5 +8,5 @@ class ActionArgument
 
     const CAREER_CVE = 'bUbdlmkEuarbjWBl';
 
-    const REQUEST_TYPE = '6bdf3ca';
+    const ACTION_TYPE = '6bdf3ca';
 }

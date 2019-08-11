@@ -46,7 +46,7 @@ class Login extends Action
                 self::ID_ARGUMENT => $id,
                 self::PASSWORD_ARGUMENT => $password,
                 self::LOGIN_TYPE_ARGUMENT => self::LOGIN_TYPE_STUDENT,
-                ActionArgument::REQUEST_TYPE => ActionType::LOGIN,
+                ActionArgument::ACTION_TYPE => ActionType::LOGIN,
             ],
         ]);
 
