@@ -15,12 +15,12 @@ class Login extends Action
     const ID_ARGUMENT = '108be0d';
 
     const PASSWORD_ARGUMENT = 'd937aa6b';
-    
+
     const LOGIN_TYPE_ARGUMENT = '0c19de58';
-    
-    const LOGIN_TYPE_STUDENT = 1;
-    
-    const LOGIN_TYPE_TEACHER = 2;
+
+    const LOGIN_TYPE_STUDENT = '01';
+
+    const LOGIN_TYPE_TEACHER = '02';
 
     /**
      * Attempts to login in behalf of a Student.
