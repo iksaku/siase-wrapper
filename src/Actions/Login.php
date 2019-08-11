@@ -15,6 +15,12 @@ class Login extends Action
     const ID_ARGUMENT = '108be0d';
 
     const PASSWORD_ARGUMENT = 'd937aa6b';
+    
+    const LOGIN_TYPE_ARGUMENT = '0c19de58';
+    
+    const LOGIN_TYPE_STUDENT = 1;
+    
+    const LOGIN_TYPE_TEACHER = 2;
 
     /**
      * Attempts to login in behalf of a Student.
@@ -39,8 +45,8 @@ class Login extends Action
             'query' => [
                 self::ID_ARGUMENT => $id,
                 self::PASSWORD_ARGUMENT => $password,
-                ActionArgument::REQUEST_TYPE => '1',
-                '0c19de58' => '01', // *Maybe* Requesting Client Id (Native Mobile App)
+                self::LOGIN_TYPE_ARGUMENT => self::LOGIN_TYPE_STUDENT,
+                ActionArgument::REQUEST_TYPE => ActionType::LOGIN,
             ],
         ]);
 
