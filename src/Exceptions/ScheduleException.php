@@ -3,12 +3,22 @@
 namespace SIASE\Exceptions;
 
 use Exception;
+use SIASE\Student;
 use Throwable;
 
 class ScheduleException extends Exception
 {
-    public function __construct(Throwable $previous = null)
+    /**
+     * ScheduleException constructor.
+     * @param Student $student
+     * @param Throwable|null $previous
+     */
+    public function __construct(Student $student, Throwable $previous = null)
     {
-        parent::__construct('Unable to fetch Schedule', 2, $previous);
+        parent::__construct(
+            'Unable to fetch Schedule for Student \''.$student->name.'\'',
+            2,
+            $previous
+        );
     }
 }

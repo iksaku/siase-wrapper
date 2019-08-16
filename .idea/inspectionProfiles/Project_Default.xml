@@ -1,0 +1,8 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PhpUnused" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="SUPPRESS_GETTERS_AND_SETTERS" value="true" />
+    </inspection_tool>
+  </profile>
+</component>

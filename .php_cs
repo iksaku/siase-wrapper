@@ -82,7 +82,7 @@ $rules = [
     'self_accessor' => true,
     'array_syntax' => ['syntax' => 'short'],
     'short_scalar_cast' => true,
-    'simplified_null_return' => true,
+    'simplified_null_return' => false,
     'single_blank_line_at_eof' => true,
     'single_blank_line_before_namespace' => true,
     'single_class_element_per_statement' => true,
