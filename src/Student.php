@@ -74,7 +74,7 @@ class Student extends Model
      * @param string $trim
      * @param Career[] $careers
      */
-    protected function __construct(int $id, string $name, string $trim, array $careers)
+    public function __construct(int $id, string $name, string $trim, array $careers)
     {
         $this->id = $id;
         $this->name = $name;
@@ -135,11 +135,28 @@ class Student extends Model
             $careersData = [$careersData];
         }
         foreach ($careersData as $career) {
-            $careers[] = $careerSerializer->denormalize($career, Career::class);
+            $careers[] = $careerSerializer->denormalize($career, Career::class, [
+                'default_constructor_arguments' => [
+                    Career::class => [
+                        'name' => '',
+                        'short_name' => '',
+                        'cve' => '',
+                    ],
+                ],
+            ]);
         }
 
         /** @var Student $student */
-        $student = $serializer->denormalize($data, self::class);
+        $student = $serializer->denormalize($data, self::class, [
+            'default_constructor_arguments' => [
+                self::class => [
+                    'id' => 0,
+                    'name' => '',
+                    'trim' => '',
+                    'careers' => [],
+                ],
+            ],
+        ]);
         $student->setCareers($careers);
 
         return $student;

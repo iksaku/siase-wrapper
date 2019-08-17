@@ -37,7 +37,7 @@ class Career extends Model
      * @param string $short_name
      * @param string $cve
      */
-    protected function __construct(string $name, string $short_name, string $cve)
+    public function __construct(string $name, string $short_name, string $cve)
     {
         $this->name = $name;
         $this->short_name = $short_name;

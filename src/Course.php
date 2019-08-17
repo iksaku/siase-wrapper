@@ -75,22 +75,26 @@ class Course extends Model
      * @param int $id
      * @param string $name
      * @param string $short_name
-     * @param int $day
+     * @param int|int[] $days
      * @param string $starts_at
      * @param string $ends_at
      * @param int $group
      * @param string $room
      */
-    protected function __construct(int $id, string $name, string $short_name, int $day, string $starts_at, string $ends_at, int $group, string $room)
+    public function __construct(int $id, string $name, string $short_name, $days, string $starts_at, string $ends_at, int $group, string $room)
     {
         $this->id = $id;
         $this->name = $name;
         $this->short_name = $short_name;
-        $this->days = [$day];
         $this->starts_at = $starts_at;
         $this->ends_at = $ends_at;
         $this->group = $group;
         $this->room = $room;
+        
+        if (!is_array($days)) {
+            $days = [$days];
+        }
+        $this->days = $days;
     }
 
     /**

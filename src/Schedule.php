@@ -36,7 +36,7 @@ class Schedule extends Model
      * @param string $period
      * @param Course[] $courses
      */
-    public function __construct(string $period = '', array $courses = [])
+    public function __construct(string $period, array $courses)
     {
         $this->period = $period;
         $this->courses = $courses;
@@ -101,12 +101,32 @@ class Schedule extends Model
                 if (!is_array($course['Dia'])) {
                     $course['Dia'] = [(int) $course['Dia']];
                 }
-                $courses[$course['Id']] = $courseSerializer->denormalize($course, Course::class);
+                $courses[$course['Id']] = $courseSerializer->denormalize($course, Course::class, [
+                    'default_constructor_arguments' => [
+                        Course::class => [
+                            'id' => 0,
+                            'name' => '',
+                            'short_name' => '',
+                            'days' => [],
+                            'starts_at' => '',
+                            'ends_at' => '',
+                            'group' => 0,
+                            'room' => '',
+                        ],
+                    ],
+                ]);
             }
         }
 
         /** @var Schedule $schedule */
-        $schedule = $serializer->denormalize($data, self::class);
+        $schedule = $serializer->denormalize($data, self::class, [
+            'default_constructor_arguments' => [
+                self::class => [
+                    'period' => '',
+                    'courses' => [],
+                ],
+            ],
+        ]);
         $schedule->setCourses(array_values($courses));
 
         return $schedule;
