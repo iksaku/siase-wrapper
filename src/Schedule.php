@@ -101,7 +101,7 @@ class Schedule extends Model
                 if (!is_array($course['Dia'])) {
                     $course['Dia'] = [(int) $course['Dia']];
                 }
-                $courses[$course['Id']] = $courseSerializer->denormalize($course, Course::class, [
+                $courses[$course['Id']] = $courseSerializer->denormalize($course, Course::class, null, [
                     'default_constructor_arguments' => [
                         Course::class => [
                             'id' => 0,
@@ -119,7 +119,7 @@ class Schedule extends Model
         }
 
         /** @var Schedule $schedule */
-        $schedule = $serializer->denormalize($data, self::class, [
+        $schedule = $serializer->denormalize($data self::class, null, [
             'default_constructor_arguments' => [
                 self::class => [
                     'period' => '',

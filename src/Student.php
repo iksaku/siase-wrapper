@@ -1,4 +1,4 @@
-<?php
+o<?php
 
 namespace SIASE;
 
@@ -135,7 +135,7 @@ class Student extends Model
             $careersData = [$careersData];
         }
         foreach ($careersData as $career) {
-            $careers[] = $careerSerializer->denormalize($career, Career::class, [
+            $careers[] = $careerSerializer->denormalize($career, Career::class, null, [
                 'default_constructor_arguments' => [
                     Career::class => [
                         'name' => '',
@@ -147,7 +147,7 @@ class Student extends Model
         }
 
         /** @var Student $student */
-        $student = $serializer->denormalize($data, self::class, [
+        $student = $serializer->denormalize($data, self::class, null, [
             'default_constructor_arguments' => [
                 self::class => [
                     'id' => 0,
