@@ -90,7 +90,7 @@ class Course extends Model
         $this->ends_at = $ends_at;
         $this->group = $group;
         $this->room = $room;
-        
+
         if (!is_array($days)) {
             $days = [$days];
         }

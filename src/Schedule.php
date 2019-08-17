@@ -119,7 +119,7 @@ class Schedule extends Model
         }
 
         /** @var Schedule $schedule */
-        $schedule = $serializer->denormalize($data self::class, null, [
+        $schedule = $serializer->denormalize($data, self::class, null, [
             'default_constructor_arguments' => [
                 self::class => [
                     'period' => '',

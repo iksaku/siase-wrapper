@@ -19,10 +19,10 @@ abstract class Model
     public static function getSerializer(): Serializer
     {
         return new Serializer([
-            new ObjectNormalizer()
+            new ObjectNormalizer(),
         ], [
             new XmlEncoder(),
-            new JsonEncoder()
+            new JsonEncoder(),
         ]);
     }
 
