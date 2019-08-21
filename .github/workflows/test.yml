@@ -1,0 +1,19 @@
+name: CI
+
+on: [push]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Composer Install
+      uses: MilesChou/composer-action@v0.0.1
+      with:
+        args: install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+    - name: PHP-CS-Fixer
+      needs:
+        - "Composer Install"
+      run: ./vendor/bin/php-cs-fixer fix
