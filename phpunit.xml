@@ -12,7 +12,9 @@
         <testsuite name="Career">
             <directory suffix="CareerTest.php">./tests</directory>
         </testsuite>
-
+        <testsuite name="Course">
+            <directory suffix="CourseTest.php">./tests</directory>
+        </testsuite>
         <testsuite name="Student">
             <directory suffix="StudentTest.php">./tests</directory>
         </testsuite>

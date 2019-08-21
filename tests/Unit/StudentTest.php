@@ -16,7 +16,7 @@ class StudentTest extends TestCase
      */
     public function student_provider(): array
     {
-        $faker = $this->getFakerGenerator();
+        $faker = $this->getFaker();
 
         return [
             [
@@ -41,7 +41,7 @@ class StudentTest extends TestCase
     {
         $this->assertSame($id, $student->getId());
 
-        $student->setId($id = $this->getFakerGenerator()->numberBetween());
+        $student->setId($id = $this->getFaker()->numberBetween());
         $this->assertSame($id, $student->getId());
     }
 
@@ -57,7 +57,7 @@ class StudentTest extends TestCase
     {
         $this->assertSame($name, $student->getName());
 
-        $student->setName($name = $this->getFakerGenerator()->name);
+        $student->setName($name = $this->getFaker()->name);
         $this->assertSame($name, $student->getName());
     }
 
@@ -73,7 +73,7 @@ class StudentTest extends TestCase
     {
         $this->assertSame($trim, $student->getTrim());
 
-        $student->setTrim($trim = (string) $this->getFakerGenerator()->numberBetween());
+        $student->setTrim($trim = (string) $this->getFaker()->numberBetween());
         $this->assertSame($trim, $student->getTrim());
     }
 

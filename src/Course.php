@@ -117,7 +117,7 @@ class Course extends Model
      */
     public function __call($name, $arguments)
     {
-        if (preg_match('/shouldAttendOn(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/', $name, $matches)) {
+        if (preg_match('/^shouldAttendOn(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)$/', $name, $matches)) {
             $day = strtoupper($matches[1]);
 
             return in_array(constant('Carbon\Carbon::'.$day), $this->days);

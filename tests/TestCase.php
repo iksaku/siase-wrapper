@@ -8,11 +8,18 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 class TestCase extends PHPUnitTestCase
 {
+    /** @var Generator */
+    private $faker;
+
     /**
      * @return Generator
      */
-    public function getFakerGenerator(): Generator
+    public function getFaker(): Generator
     {
-        return Factory::create('es_ES');
+        if (empty($this->faker)) {
+            $this->faker = Factory::create('es_ES');
+        }
+
+        return $this->faker;
     }
 }

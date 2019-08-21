@@ -14,7 +14,7 @@ class CareerTest extends TestCase
      */
     public function career_provider(): array
     {
-        $faker = $this->getFakerGenerator();
+        $faker = $this->getFaker();
 
         $name = $faker->words(3, true);
         preg_match_all('/(?<=\s|^)(.)/', $name, $matches);
@@ -41,7 +41,7 @@ class CareerTest extends TestCase
     {
         $this->assertSame($name, $career->getName());
 
-        $career->setName($name = $this->getFakerGenerator()->words(3, true));
+        $career->setName($name = $this->getFaker()->words(3, true));
         $this->assertSame($name, $career->getName());
     }
 
@@ -71,7 +71,7 @@ class CareerTest extends TestCase
     {
         $this->assertSame($cve, $career->getCve());
 
-        $career->setCve($cve = dechex($this->getFakerGenerator()->numberBetween()));
+        $career->setCve($cve = dechex($this->getFaker()->numberBetween()));
         $this->assertSame($cve, $career->getCve());
     }
 }
