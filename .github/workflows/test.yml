@@ -13,5 +13,7 @@ jobs:
       uses: MilesChou/composer-action@v0.0.1
       with:
         args: install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-    - name: PHP-CS-Fixer
+    - name: Style Check
       run: ./vendor/bin/php-cs-fixer fix
+    - name: Unit Tests
+      run: ./vendor/bin/phpunit
