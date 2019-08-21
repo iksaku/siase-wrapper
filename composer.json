@@ -45,8 +45,5 @@
         "psr-4": {
             "SIASE\\Tests\\": "tests/"
         }
-    },
-    "scripts": {
-        "test": "@php ./vendor/bin/phpunit"
     }
 }
