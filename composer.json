@@ -9,6 +9,8 @@
             "email": "iksaku@me.com"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=7.0",
         "guzzlehttp/guzzle": "^6.3",
@@ -16,18 +18,21 @@
         "nesbot/carbon": "^2.22",
         "ext-json": "*",
         "symfony/serializer": "^4.3",
-        "symfony/property-access": "^4.3"
+        "symfony/property-access": "^4.3",
+        "fzaninotto/faker": "^1.8"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.15"
+        "friendsofphp/php-cs-fixer": "^2.15",
+        "phpunit/phpunit": "^8.3"
     },
     "extra": {
         "hooks": {
             "pre-commit": [
-                "php-cs-fixer fix"
+                "@php ./vendor/bin/php-cs-fixer fix"
             ],
             "pre-push": [
-                "php-cs-fixer fix --dry-run"
+                "@php ./vendor/bin/php-cs-fixer fix --dry-run",
+                "@php ./vendor/bin/phpunit"
             ]
         }
     },
@@ -40,5 +45,8 @@
         "psr-4": {
             "SIASE\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "@php ./vendor/bin/phpunit"
     }
 }

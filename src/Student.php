@@ -4,7 +4,6 @@ namespace SIASE;
 
 use Psr\Http\Message\ResponseInterface;
 use SIASE\Exceptions\LoginException;
-use SIASE\Exceptions\ScheduleException;
 use SIASE\Normalizers\StudentNormalizer;
 use SIASE\Requests\Request;
 use SIASE\Requests\RequestArgument;
@@ -14,6 +13,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Throwable;
 
 /**
  * Class Student.
@@ -228,9 +228,9 @@ class Student extends Model
     }
 
     /**
-     * @return Career
+     * @return Career|null
      */
-    public function getCurrentCareer(): Career
+    public function getCurrentCareer()
     {
         if (empty($this->current_career)) {
             $this->setCurrentCareer();
@@ -244,7 +244,7 @@ class Student extends Model
      */
     public function setCurrentCareer(Career $current_career = null)
     {
-        if (empty($current_career)) {
+        if (empty($current_career) && !empty($this->getCareers())) {
             $current_career = $this->getCareers()[count($this->careers) - 1];
         }
 
@@ -252,18 +252,18 @@ class Student extends Model
     }
 
     /**
-     * @return Schedule
-     * @throws ExceptionInterface
+     * @param bool $fetch
+     * If set to False, we'll not try to fetch the current
+     * Schedule even if there's no schedule currently available
+     * @return Schedule|null
      */
-    public function getSchedule(): Schedule
+    public function getSchedule(bool $fetch = true)
     {
-        if (empty($this->schedule)) {
+        if (empty($this->schedule) && $fetch) {
             try {
                 $this->setSchedule(Schedule::requestFor($this));
-            } catch (ScheduleException $e) {
+            } catch (Throwable $e) {
                 trigger_error($e->getMessage());
-
-                return null;
             }
         }
 
