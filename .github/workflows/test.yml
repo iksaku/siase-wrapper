@@ -14,4 +14,4 @@ jobs:
     - name: Style Check
       run: composer test:lint
     - name: Unit Tests
-      run: ./vendor/bin/phpunit
+      run: composer test:unit
