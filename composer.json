@@ -45,5 +45,13 @@
         "psr-4": {
             "SIASE\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test:lint": "php-cs-fixer fix --dry-run",
+        "test:unit": "phpunit",
+        "test": [
+            "@test:lint",
+            "@test:unit"
+        ]
     }
 }
