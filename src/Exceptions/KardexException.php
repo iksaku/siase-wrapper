@@ -6,18 +6,18 @@ use Exception;
 use SIASE\Student;
 use Throwable;
 
-class ScheduleException extends Exception
+class KardexException extends Exception
 {
     /**
-     * ScheduleException constructor.
+     * KardexException constructor.
      * @param Student $student
      * @param Throwable|null $previous
      */
     public function __construct(Student $student, Throwable $previous = null)
     {
         parent::__construct(
-            'Unable to fetch Schedule for Student \''.$student->getName().'\'',
-            3,
+            'Unable to fetch Kardex for Student \''.$student->getName().'\'',
+            2,
             $previous
         );
     }

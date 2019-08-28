@@ -4,10 +4,12 @@ namespace SIASE;
 
 use Psr\Http\Message\ResponseInterface;
 use SIASE\Exceptions\LoginException;
+use SIASE\Kardex\Kardex;
 use SIASE\Normalizers\StudentNormalizer;
 use SIASE\Requests\Request;
 use SIASE\Requests\RequestArgument;
 use SIASE\Requests\RequestType;
+use SIASE\Schedule\Schedule;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -56,13 +58,19 @@ class Student extends Model
     protected $careers;
 
     /**
-     * Return the Career to which student currently belongs.
+     * Return the Career to which Student currently belongs.
      * @var Career
      */
     protected $current_career;
 
     /**
-     * Currently active schedule of student.
+     * Kardex of Student.
+     * @var Kardex
+     */
+    protected $kardex;
+
+    /**
+     * Currently active schedule of Student.
      * @var Schedule
      */
     protected $schedule;
@@ -249,6 +257,33 @@ class Student extends Model
         }
 
         $this->current_career = $current_career;
+    }
+
+    /**
+     * @param bool $fetch
+     * If set to False, we'll not try to fetch the current
+     * Kardex even if there's no kardex currently available
+     * @return Kardex
+     */
+    public function getKardex(bool $fetch = true)
+    {
+        if (empty($this->kardex) && $fetch) {
+            try {
+                $this->setKardex(Kardex::requestFor($this));
+            } catch (Throwable $e) {
+                trigger_error($e->getMessage());
+            }
+        }
+
+        return $this->kardex;
+    }
+
+    /**
+     * @param Kardex $kardex
+     */
+    public function setKardex(Kardex $kardex)
+    {
+        $this->kardex = $kardex;
     }
 
     /**

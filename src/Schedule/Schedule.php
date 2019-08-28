@@ -1,13 +1,15 @@
 <?php
 
-namespace SIASE;
+namespace SIASE\Schedule;
 
 use Psr\Http\Message\ResponseInterface;
 use SIASE\Exceptions\ScheduleException;
+use SIASE\Model;
 use SIASE\Normalizers\ScheduleNormalizer;
 use SIASE\Requests\Request;
 use SIASE\Requests\RequestArgument;
 use SIASE\Requests\RequestType;
+use SIASE\Student;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;

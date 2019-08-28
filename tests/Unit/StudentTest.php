@@ -5,7 +5,9 @@
 namespace SIASE\Tests\Unit;
 
 use SIASE\Career;
-use SIASE\Schedule;
+use SIASE\Kardex\Grade;
+use SIASE\Kardex\Kardex;
+use SIASE\Schedule\Schedule;
 use SIASE\Student;
 use SIASE\Tests\TestCase;
 
@@ -118,6 +120,24 @@ class StudentTest extends TestCase
 
         $student->setCurrentCareer($new_career = new Career('New Career', 'nc', ''));
         $this->assertSame($new_career, $student->getCurrentCareer());
+    }
+
+    /**
+     * @param int $id
+     * @param string $name
+     * @param string $trim
+     * @param array $careers
+     * @param Student $student
+     * @dataProvider student_provider
+     */
+    public function test_student_kardex(int $id, string $name, string $trim, array $careers, Student $student)
+    {
+        $this->assertEmpty($student->getKardex(false));
+
+        $student->setKardex($kardex = new Kardex([
+            new Grade(0, 'Party Hard', 101),
+        ]));
+        $this->assertSame($kardex, $student->getKardex(false));
     }
 
     /**

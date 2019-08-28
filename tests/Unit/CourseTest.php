@@ -5,7 +5,7 @@
 namespace SIASE\Tests\Unit;
 
 use Carbon\Carbon;
-use SIASE\Course;
+use SIASE\Schedule\Course;
 use SIASE\Tests\TestCase;
 
 class CourseTest extends TestCase

@@ -1,8 +1,9 @@
 <?php
 
-namespace SIASE;
+namespace SIASE\Schedule;
 
 use BadMethodCallException;
+use SIASE\Model;
 use SIASE\Normalizers\CourseNormalizer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
