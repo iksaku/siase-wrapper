@@ -2,7 +2,7 @@
 
 /** @noinspection PhpUnusedParameterInspection */
 
-namespace SIASE\Tests\Unit;
+namespace SIASE\Tests\Unit\Schedule;
 
 use Carbon\Carbon;
 use SIASE\Schedule\Course;
@@ -114,14 +114,19 @@ class CourseTest extends TestCase
 
         array_push($days, ...[Carbon::TUESDAY, Carbon::THURSDAY]);
         $course->addDays(...$days);
+        // Unordered $days in test, must be different by course's ordered.
+        $this->assertNotSame($days, $course->getDays());
+        // Ordered $days in test, must be same as course order.
         sort($days, SORT_NUMERIC);
-        $this->assertEquals($days, $course->getDays());
+        $this->assertSame($days, $course->getDays());
 
         $this->assertTrue($course->shouldAttendOnMonday());
         $this->assertTrue($course->shouldAttendOnTuesday());
         $this->assertTrue($course->shouldAttendOnWednesday());
         $this->assertTrue($course->shouldAttendOnThursday());
         $this->assertTrue($course->shouldAttendOnFriday());
+
+        $this->assertFalse($course->shouldAttendOnSaturday());
 
         $course->setDays($days = [Carbon::SATURDAY]);
         $this->assertSame($days, $course->getDays());

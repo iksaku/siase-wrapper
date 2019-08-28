@@ -51,7 +51,7 @@ class StudentTest extends TestCase
      * @param int $id
      * @param string $name
      * @param string $trim
-     * @param array $careers
+     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
@@ -67,7 +67,7 @@ class StudentTest extends TestCase
      * @param int $id
      * @param string $name
      * @param string $trim
-     * @param array $careers
+     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
@@ -83,7 +83,7 @@ class StudentTest extends TestCase
      * @param int $id
      * @param string $name
      * @param string $trim
-     * @param array $careers
+     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
@@ -103,7 +103,7 @@ class StudentTest extends TestCase
      * @param int $id
      * @param string $name
      * @param string $trim
-     * @param array $careers
+     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
@@ -126,7 +126,7 @@ class StudentTest extends TestCase
      * @param int $id
      * @param string $name
      * @param string $trim
-     * @param array $careers
+     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
@@ -144,7 +144,7 @@ class StudentTest extends TestCase
      * @param int $id
      * @param string $name
      * @param string $trim
-     * @param array $careers
+     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */

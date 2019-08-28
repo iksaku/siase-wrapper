@@ -96,10 +96,19 @@ class Kardex extends Model
     }
 
     /**
+     * @param Grade ...$grades
+     */
+    public function addGrades(...$grades)
+    {
+        $this->setGrades(array_unique(array_merge($this->grades, $grades), SORT_REGULAR));
+    }
+
+    /**
      * @param Grade[] $grades
      */
     public function setGrades(array $grades)
     {
+        sort($grades, SORT_REGULAR);
         $this->grades = $grades;
     }
 }
