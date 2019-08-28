@@ -12,6 +12,6 @@ jobs:
       with:
         args: install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
     - name: Style Check
-      run: ./vendor/bin/php-cs-fixer fix
+      run: composer test:lint
     - name: Unit Tests
       run: ./vendor/bin/phpunit
