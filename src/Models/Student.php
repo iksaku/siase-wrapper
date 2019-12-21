@@ -1,18 +1,18 @@
 <?php
 
-namespace SIASE;
+namespace SIASE\Models;
 
 use Psr\Http\Message\ResponseInterface;
+use SIASE\Encoders\StudentEncoder;
 use SIASE\Exceptions\LoginException;
-use SIASE\Kardex\Kardex;
-use SIASE\Normalizers\StudentNormalizer;
+use SIASE\Models\Kardex\Kardex;
+use SIASE\Models\Schedule\Schedule;
 use SIASE\Requests\Request;
 use SIASE\Requests\RequestArgument;
 use SIASE\Requests\RequestType;
-use SIASE\Schedule\Schedule;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
@@ -61,7 +61,7 @@ class Student extends Model
      * Return the Career to which Student currently belongs.
      * @var Career
      */
-    protected $current_career;
+    protected $currentCareer;
 
     /**
      * Kardex of Student.
@@ -81,26 +81,41 @@ class Student extends Model
      * @param string $name
      * @param string $trim
      * @param Career[] $careers
+     * @param Career|null $currentCareer
      */
-    public function __construct(int $id, string $name, string $trim, array $careers)
+    public function __construct(int $id, string $name, string $trim, array $careers = [], Career $currentCareer = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->trim = $trim;
         $this->careers = $careers;
+        $this->currentCareer = $currentCareer;
     }
 
     /**
-     * @return Serializer
+     * @return array
      */
-    public static function getSerializer(): Serializer
+    protected static function getNormalizers(): array
     {
-        return new Serializer([
-            new ObjectNormalizer(null, new StudentNormalizer()),
-        ], [
-            new XmlEncoder(),
-            new JsonEncoder(),
-        ]);
+        return [
+            new ObjectNormalizer(
+                null,
+                null,
+                null,
+                new PhpDocExtractor()
+            ),
+            new ArrayDenormalizer(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getEncoders(): array
+    {
+        return array_merge([
+            new StudentEncoder(),
+        ], parent::getEncoders());
     }
 
     /**
@@ -123,49 +138,17 @@ class Student extends Model
         ]);
 
         /** @var Serializer $serializer */
-        $serializer = self::getSerializer();
+        $serializer = static::serializer();
 
         /** @var array $data */
         $data = $serializer->decode($response->getBody()->getContents(), 'xml');
 
-        if (filter_var($data['ttError']['ttErrorRow']['lError'], FILTER_VALIDATE_BOOLEAN)) {
+        if (isset($data['error']) && $data['error']) {
             throw new LoginException();
         }
 
-        /** @var Serializer $careerSerializer */
-        $careerSerializer = Career::getSerializer();
-        /** @var Career[] $careers */
-        $careers = [];
-        $careersData = $data['ttCarrera']['ttCarreraRow'];
-
-        // If only 1 career listed...
-        if (isset($careersData['DesCarrera'])) {
-            $careersData = [$careersData];
-        }
-        foreach ($careersData as $career) {
-            $careers[] = $careerSerializer->denormalize($career, Career::class, null, [
-                'default_constructor_arguments' => [
-                    Career::class => [
-                        'name' => '',
-                        'short_name' => '',
-                        'cve' => '',
-                    ],
-                ],
-            ]);
-        }
-
         /** @var Student $student */
-        $student = $serializer->denormalize($data, self::class, null, [
-            'default_constructor_arguments' => [
-                self::class => [
-                    'id' => 0,
-                    'name' => '',
-                    'trim' => '',
-                    'careers' => [],
-                ],
-            ],
-        ]);
-        $student->setCareers($careers);
+        $student = $serializer->denormalize($data, static::class);
 
         return $student;
     }
@@ -240,23 +223,23 @@ class Student extends Model
      */
     public function getCurrentCareer()
     {
-        if (empty($this->current_career)) {
+        if (empty($this->currentCareer)) {
             $this->setCurrentCareer();
         }
 
-        return $this->current_career;
+        return $this->currentCareer;
     }
 
     /**
-     * @param Career $current_career
+     * @param Career $currentCareer
      */
-    public function setCurrentCareer(Career $current_career = null)
+    public function setCurrentCareer(Career $currentCareer = null)
     {
-        if (empty($current_career) && !empty($this->getCareers())) {
-            $current_career = $this->getCareers()[count($this->careers) - 1];
+        if (empty($currentCareer) && !empty($this->getCareers())) {
+            $currentCareer = $this->getCareers()[count($this->careers) - 1];
         }
 
-        $this->current_career = $current_career;
+        $this->currentCareer = $currentCareer;
     }
 
     /**
@@ -269,7 +252,7 @@ class Student extends Model
     {
         if (empty($this->kardex) && $fetch) {
             try {
-                $this->setKardex(Kardex::requestFor($this));
+                $this->setKardex(Kardex::fetchFor($this));
             } catch (Throwable $e) {
                 trigger_error($e->getMessage());
             }
@@ -296,7 +279,7 @@ class Student extends Model
     {
         if (empty($this->schedule) && $fetch) {
             try {
-                $this->setSchedule(Schedule::requestFor($this));
+                $this->setSchedule(Schedule::fetchFor($this));
             } catch (Throwable $e) {
                 trigger_error($e->getMessage());
             }

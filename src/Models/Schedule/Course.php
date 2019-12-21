@@ -1,14 +1,9 @@
 <?php
 
-namespace SIASE\Schedule;
+namespace SIASE\Models\Schedule;
 
 use BadMethodCallException;
-use SIASE\Model;
-use SIASE\Normalizers\CourseNormalizer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use SIASE\Models\Model;
 
 /**
  * Class Course.
@@ -39,7 +34,7 @@ class Course extends Model
      * Abbreviation of Course's name.
      * @var string
      */
-    protected $short_name;
+    protected $shortName;
 
     /**
      * Days on which the class is held.
@@ -51,13 +46,13 @@ class Course extends Model
      * Hour at which class starts (24h format).
      * @var string
      */
-    protected $starts_at;
+    protected $startsAt;
 
     /**
      * Hour at which class ends (24h format).
      * @var string
      */
-    protected $ends_at;
+    protected $endsAt;
 
     /**
      * Group number to which the Student belongs.
@@ -75,40 +70,23 @@ class Course extends Model
      * Course constructor.
      * @param int $id
      * @param string $name
-     * @param string $short_name
-     * @param int|int[] $days
-     * @param string $starts_at
-     * @param string $ends_at
+     * @param string $shortName
+     * @param int[] $days
+     * @param string $startsAt
+     * @param string $endsAt
      * @param int $group
      * @param string $room
      */
-    public function __construct(int $id, string $name, string $short_name, $days, string $starts_at, string $ends_at, int $group, string $room)
+    public function __construct(int $id, string $name, string $shortName, array $days, string $startsAt, string $endsAt, int $group, string $room)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->short_name = $short_name;
-        $this->starts_at = $starts_at;
-        $this->ends_at = $ends_at;
+        $this->shortName = $shortName;
+        $this->days = $days;
+        $this->startsAt = $startsAt;
+        $this->endsAt = $endsAt;
         $this->group = $group;
         $this->room = $room;
-
-        if (!is_array($days)) {
-            $days = [$days];
-        }
-        $this->days = $days;
-    }
-
-    /**
-     * @return Serializer
-     */
-    public static function getSerializer(): Serializer
-    {
-        return new Serializer([
-            new ObjectNormalizer(null, new CourseNormalizer()),
-        ], [
-            new XmlEncoder(),
-            new JsonEncoder(),
-        ]);
     }
 
     /**
@@ -166,15 +144,15 @@ class Course extends Model
      */
     public function getShortName(): string
     {
-        return $this->short_name;
+        return $this->shortName;
     }
 
     /**
-     * @param string $short_name
+     * @param string $shortName
      */
-    public function setShortName(string $short_name)
+    public function setShortName(string $shortName)
     {
-        $this->short_name = $short_name;
+        $this->shortName = $shortName;
     }
 
     /**
@@ -183,14 +161,6 @@ class Course extends Model
     public function getDays(): array
     {
         return $this->days;
-    }
-
-    /**
-     * @param int[] ...$days
-     */
-    public function addDays(...$days)
-    {
-        $this->setDays(array_unique(array_merge($this->days, $days), SORT_NUMERIC));
     }
 
     /**
@@ -207,31 +177,15 @@ class Course extends Model
      */
     public function getStartsAt(): string
     {
-        return $this->starts_at;
+        return $this->startsAt;
     }
 
     /**
-     * @param string $starts_at
+     * @param string $startsAt
      */
-    public function adjustStartsAt(string $starts_at)
+    public function setStartsAt(string $startsAt)
     {
-        $this->starts_at = min($this->starts_at, $starts_at);
-    }
-
-    /**
-     * @param string $starts_at
-     */
-    public function setStartsAt(string $starts_at)
-    {
-        $this->starts_at = $starts_at;
-    }
-
-    /**
-     * @param string $ends_at
-     */
-    public function adjustEndsAt(string $ends_at)
-    {
-        $this->ends_at = max($this->ends_at, $ends_at);
+        $this->startsAt = $startsAt;
     }
 
     /**
@@ -239,15 +193,15 @@ class Course extends Model
      */
     public function getEndsAt(): string
     {
-        return $this->ends_at;
+        return $this->endsAt;
     }
 
     /**
-     * @param string $ends_at
+     * @param string $endsAt
      */
-    public function setEndsAt(string $ends_at)
+    public function setEndsAt(string $endsAt)
     {
-        $this->ends_at = $ends_at;
+        $this->endsAt = $endsAt;
     }
 
     /**

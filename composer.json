@@ -12,13 +12,13 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.2",
         "guzzlehttp/guzzle": "^6.3",
         "ext-simplexml": "*",
         "nesbot/carbon": "^2.22",
         "ext-json": "*",
-        "symfony/serializer": "^4.3",
-        "symfony/property-access": "^4.3",
+        "symfony/serializer": "^5.0",
+        "symfony/property-info": "^5.0",
         "fzaninotto/faker": "^1.8"
     },
     "require-dev": {
@@ -47,7 +47,8 @@
         }
     },
     "scripts": {
-        "test:lint": "php-cs-fixer fix --dry-run",
+        "lint": "php-cs-fixer fix",
+        "test:lint": "@lint --dry-run",
         "test:unit": "phpunit",
         "test": [
             "@test:lint",

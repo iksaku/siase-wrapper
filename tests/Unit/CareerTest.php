@@ -4,8 +4,7 @@
 
 namespace SIASE\Tests\Unit;
 
-use SIASE\Career;
-use SIASE\Tests\TestCase;
+use SIASE\Models\Career;
 
 class CareerTest extends TestCase
 {

@@ -3,7 +3,7 @@
 namespace SIASE\Exceptions;
 
 use Exception;
-use SIASE\Student;
+use SIASE\Models\Student;
 use Throwable;
 
 class KardexException extends Exception

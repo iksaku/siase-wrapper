@@ -2,9 +2,9 @@
 
 namespace SIASE\Tests\Unit\Kardex;
 
-use SIASE\Kardex\Grade;
-use SIASE\Kardex\Kardex;
-use SIASE\Tests\TestCase;
+use SIASE\Models\Kardex\Grade;
+use SIASE\Models\Kardex\Kardex;
+use SIASE\Tests\Unit\TestCase;
 
 class KardexTest extends TestCase
 {
@@ -34,10 +34,6 @@ class KardexTest extends TestCase
             new Grade(1, 'First Course', 70),
             new Grade(2, 'Second Course', 80),
         ]);
-        $this->assertSame($grades, $kardex->getGrades());
-
-        $grades[] = new Grade(3, 'Third Course', 90);
-        $kardex->addGrades(...$grades);
         $this->assertSame($grades, $kardex->getGrades());
     }
 }

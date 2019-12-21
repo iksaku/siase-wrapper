@@ -4,8 +4,8 @@
 
 namespace SIASE\Tests\Unit\Kardex;
 
-use SIASE\Kardex\Grade;
-use SIASE\Tests\TestCase;
+use SIASE\Models\Kardex\Grade;
+use SIASE\Tests\Unit\TestCase;
 
 class GradeTest extends TestCase
 {

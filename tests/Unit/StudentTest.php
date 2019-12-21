@@ -4,12 +4,11 @@
 
 namespace SIASE\Tests\Unit;
 
-use SIASE\Career;
-use SIASE\Kardex\Grade;
-use SIASE\Kardex\Kardex;
-use SIASE\Schedule\Schedule;
-use SIASE\Student;
-use SIASE\Tests\TestCase;
+use SIASE\Models\Career;
+use SIASE\Models\Kardex\Grade;
+use SIASE\Models\Kardex\Kardex;
+use SIASE\Models\Schedule\Schedule;
+use SIASE\Models\Student;
 
 class StudentTest extends TestCase
 {

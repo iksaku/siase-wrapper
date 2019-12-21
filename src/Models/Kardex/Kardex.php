@@ -1,15 +1,19 @@
 <?php
 
-namespace SIASE\Kardex;
+namespace SIASE\Models\Kardex;
 
 use Psr\Http\Message\ResponseInterface;
+use SIASE\Encoders\KardexEncoder;
 use SIASE\Exceptions\KardexException;
-use SIASE\Model;
+use SIASE\Models\Model;
+use SIASE\Models\Student;
 use SIASE\Requests\Request;
 use SIASE\Requests\RequestArgument;
 use SIASE\Requests\RequestType;
-use SIASE\Student;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 class Kardex extends Model
@@ -22,11 +26,38 @@ class Kardex extends Model
 
     /**
      * Kardex constructor.
-     * @param array $grades
+     * @param Grade[] $grades
      */
     public function __construct(array $grades)
     {
         $this->grades = $grades;
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getNormalizers(): array
+    {
+        return [
+            /*new KardexNormalizer(),*/
+            new ObjectNormalizer(
+                null,
+                null,
+                null,
+                new PhpDocExtractor()
+            ),
+            new ArrayDenormalizer(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getEncoders(): array
+    {
+        return array_merge([
+            new KardexEncoder(),
+        ], parent::getEncoders());
     }
 
     /**
@@ -35,7 +66,7 @@ class Kardex extends Model
      * @throws KardexException
      * @throws ExceptionInterface
      */
-    public static function requestFor(Student $student): self
+    public static function fetchFor(Student $student): self
     {
         /** @var ResponseInterface $response */
         $response = Request::make([
@@ -47,42 +78,23 @@ class Kardex extends Model
         ]);
 
         /** @var Serializer $serializer */
-        $serializer = self::getSerializer();
+        $serializer = static::serializer();
 
         /** @var array $data */
         $data = $serializer->decode($response->getBody()->getContents(), 'xml');
 
-        if (filter_var($data['vlError'], FILTER_VALIDATE_BOOLEAN)) {
+        if (isset($data['error']) && $data['error']) {
             throw new KardexException($student);
         }
 
-        /** @var Serializer $gradeSerializer */
-        $gradeSerializer = Grade::getSerializer();
-        /** @var Grade[] $grades */
-        $grades = [];
-        $gradesData = $data['ttKdx']['ttKdxRow'];
-
-        foreach ($gradesData as $grade) {
-            $grades[] = $gradeSerializer->denormalize($grade, Grade::class, null, [
-                'default_constructor_arguments' => [
-                    Grade::class => [
-                        'semester' => 0,
-                        'courseName' => '',
-                        'grade' => 0,
-                    ],
-                ],
-            ]);
-        }
-
         /** @var Kardex $kardex */
-        $kardex = $serializer->denormalize($data, self::class, null, [
-            'default_constructor_arguments' => [
-                self::class => [
+        $kardex = $serializer->denormalize($data, static::class/*, null, [
+            AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
+                static::class => [
                     'grades' => [],
                 ],
             ],
-        ]);
-        $kardex->setGrades($grades);
+        ]*/);
 
         return $kardex;
     }
@@ -93,14 +105,6 @@ class Kardex extends Model
     public function getGrades(): array
     {
         return $this->grades;
-    }
-
-    /**
-     * @param Grade ...$grades
-     */
-    public function addGrades(...$grades)
-    {
-        $this->setGrades(array_unique(array_merge($this->grades, $grades), SORT_REGULAR));
     }
 
     /**

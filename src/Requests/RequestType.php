@@ -8,9 +8,9 @@ class RequestType
 
     const KARDEX = 2;
 
-    const ACTIVE_GRADES = 3;
+    // --Commented out by Inspection (12/20/19, 7:57 PM):const ACTIVE_GRADES = 3;
 
     const SCHEDULE = 4;
 
-    const COURSES = 5;
+    // --Commented out by Inspection (12/20/19, 7:57 PM):const COURSES = 5;
 }

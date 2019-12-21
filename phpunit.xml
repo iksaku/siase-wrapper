@@ -9,23 +9,21 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Kardex Grade Test">
-            <directory suffix="GradeTest.php">./tests</directory>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+
+            <file>CareerTest.php</file>
+            <file>StudentTest.php</file>
+
+            <file>Kardex/GradeTest.php</file>
+            <file>Kardex/KardexTest.php</file>
+
+            <file>Schedule/PeriodCourseTest.php</file>
+            <file>Schedule/ScheduleTest.php</file>
         </testsuite>
-        <testsuite name="Kardex Test">
-            <directory suffix="KardexTest.php">./tests</directory>
-        </testsuite>
-        <testsuite name="Schedule Course Test">
-            <directory suffix="CourseTest.php">./tests</directory>
-        </testsuite>
-        <testsuite name="Schedule Test">
-            <directory suffix="ScheduleTest.php">./tests</directory>
-        </testsuite>
-        <testsuite name="Career Test">
-            <directory suffix="CareerTest.php">./tests</directory>
-        </testsuite>
-        <testsuite name="Student Test">
-            <directory suffix="StudentTest.php">./tests</directory>
+
+        <testsuite name="Functional">
+            <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
     <filter>

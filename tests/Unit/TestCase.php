@@ -1,6 +1,6 @@
 <?php
 
-namespace SIASE\Tests;
+namespace SIASE\Tests\Unit;
 
 use Faker\Factory;
 use Faker\Generator;

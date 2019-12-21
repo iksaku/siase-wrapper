@@ -1,12 +1,6 @@
 <?php
 
-namespace SIASE;
-
-use SIASE\Normalizers\CareerNormalizer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+namespace SIASE\Models;
 
 /**
  * Class Career.
@@ -23,7 +17,7 @@ class Career extends Model
      * Abbreviation of Career's name.
      * @var string
      */
-    protected $short_name;
+    protected $shortName;
 
     /**
      * Token that identifies the Student in the Career it belongs to.
@@ -34,27 +28,14 @@ class Career extends Model
     /**
      * Career constructor.
      * @param string $name
-     * @param string $short_name
+     * @param string $shortName
      * @param string $cve
      */
-    public function __construct(string $name, string $short_name, string $cve)
+    public function __construct(string $name, string $shortName, string $cve)
     {
         $this->name = $name;
-        $this->short_name = $short_name;
+        $this->shortName = $shortName;
         $this->cve = $cve;
-    }
-
-    /**
-     * @return Serializer
-     */
-    public static function getSerializer(): Serializer
-    {
-        return new Serializer([
-            new ObjectNormalizer(null, new CareerNormalizer()),
-        ], [
-            new XmlEncoder(),
-            new JsonEncoder(),
-        ]);
     }
 
     /**
@@ -78,15 +59,15 @@ class Career extends Model
      */
     public function getShortName(): string
     {
-        return $this->short_name;
+        return $this->shortName;
     }
 
     /**
-     * @param string $short_name
+     * @param string $shortName
      */
-    public function setShortName(string $short_name)
+    public function setShortName(string $shortName)
     {
-        $this->short_name = $short_name;
+        $this->shortName = $shortName;
     }
 
     /**

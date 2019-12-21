@@ -5,9 +5,9 @@
 namespace SIASE\Tests\Unit\Schedule;
 
 use Carbon\Carbon;
-use SIASE\Schedule\Course;
-use SIASE\Schedule\Schedule;
-use SIASE\Tests\TestCase;
+use SIASE\Models\Schedule\Course;
+use SIASE\Models\Schedule\Schedule;
+use SIASE\Tests\Unit\TestCase;
 
 class ScheduleTest extends TestCase
 {
@@ -50,13 +50,11 @@ class ScheduleTest extends TestCase
         $this->assertSame($courses, $schedule->getCourses());
 
         $schedule->setCourses($courses = [
-            new Course(0, 'First Course', 'FC', Carbon::MONDAY, '07:00', '12:00', 1, 1100),
-            new Course(1, 'Second Course', 'SC', Carbon::MONDAY, '12:00', '17:00', 2, 1101),
+            new Course(0, 'First Course', 'FC', [Carbon::MONDAY], '07:00', '12:00', 1, 1100),
+            new Course(1, 'Second Course', 'SC', [Carbon::MONDAY], '12:00', '17:00', 2, 1101),
         ]);
         $this->assertSame($courses, $schedule->getCourses());
 
-        $courses[] = new Course(2, 'Third Course', 'TC', Carbon::MONDAY, '17:00', '22:00', 3, 1102);
-        $schedule->addCourses(...$courses);
         $this->assertSame($courses, $schedule->getCourses());
     }
 }

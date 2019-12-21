@@ -1,13 +1,8 @@
 <?php
 
-namespace SIASE\Kardex;
+namespace SIASE\Models\Kardex;
 
-use SIASE\Model;
-use SIASE\Normalizers\KardexGradeNormalizer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use SIASE\Models\Model;
 
 class Grade extends Model
 {
@@ -40,19 +35,6 @@ class Grade extends Model
         $this->semester = $semester;
         $this->courseName = $courseName;
         $this->grade = $grade;
-    }
-
-    /**
-     * @return Serializer
-     */
-    public static function getSerializer(): Serializer
-    {
-        return new Serializer([
-            new ObjectNormalizer(null, new KardexGradeNormalizer()),
-        ], [
-            new XmlEncoder(),
-            new JsonEncoder(),
-        ]);
     }
 
     /**

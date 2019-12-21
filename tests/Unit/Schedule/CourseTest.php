@@ -5,8 +5,8 @@
 namespace SIASE\Tests\Unit\Schedule;
 
 use Carbon\Carbon;
-use SIASE\Schedule\Course;
-use SIASE\Tests\TestCase;
+use SIASE\Models\Schedule\Course;
+use SIASE\Tests\Unit\TestCase;
 
 class CourseTest extends TestCase
 {
@@ -112,26 +112,25 @@ class CourseTest extends TestCase
     {
         $this->assertSame($days, $course->getDays());
 
-        array_push($days, ...[Carbon::TUESDAY, Carbon::THURSDAY]);
-        $course->addDays(...$days);
-        // Unordered $days in test, must be different by course's ordered.
-        $this->assertNotSame($days, $course->getDays());
-        // Ordered $days in test, must be same as course order.
-        sort($days, SORT_NUMERIC);
-        $this->assertSame($days, $course->getDays());
-
         $this->assertTrue($course->shouldAttendOnMonday());
-        $this->assertTrue($course->shouldAttendOnTuesday());
         $this->assertTrue($course->shouldAttendOnWednesday());
-        $this->assertTrue($course->shouldAttendOnThursday());
         $this->assertTrue($course->shouldAttendOnFriday());
 
+        $this->assertFalse($course->shouldAttendOnTuesday());
+        $this->assertFalse($course->shouldAttendOnThursday());
         $this->assertFalse($course->shouldAttendOnSaturday());
+        $this->assertFalse($course->shouldAttendOnSunday());
 
-        $course->setDays($days = [Carbon::SATURDAY]);
+        $course->setDays($days = [Carbon::TUESDAY, Carbon::THURSDAY]);
         $this->assertSame($days, $course->getDays());
-        $this->assertTrue($course->shouldAttendOnSaturday());
 
+        $this->assertTrue($course->shouldAttendOnTuesday());
+        $this->assertTrue($course->shouldAttendOnThursday());
+
+        $this->assertFalse($course->shouldAttendOnMonday());
+        $this->assertFalse($course->shouldAttendOnWednesday());
+        $this->assertFalse($course->shouldAttendOnFriday());
+        $this->assertFalse($course->shouldAttendOnSaturday());
         $this->assertFalse($course->shouldAttendOnSunday());
     }
 
@@ -153,12 +152,6 @@ class CourseTest extends TestCase
 
         $course->setStartsAt($starts_at = '12:00');
         $this->assertSame($starts_at, $course->getStartsAt());
-
-        $course->adjustStartsAt($starts_at = '16:20');
-        $this->assertNotSame($starts_at, $course->getStartsAt());
-
-        $course->adjustStartsAt($starts_at = '07:00');
-        $this->assertSame($starts_at, $course->getStartsAt());
     }
 
     /**
@@ -178,12 +171,6 @@ class CourseTest extends TestCase
         $this->assertSame($ends_at, $course->getEndsAt());
 
         $course->setEndsAt($ends_at = '17:00');
-        $this->assertSame($ends_at, $course->getEndsAt());
-
-        $course->adjustEndsAt($ends_at = '09:11');
-        $this->assertNotSame($ends_at, $course->getEndsAt());
-
-        $course->adjustEndsAt($ends_at = '22:00');
         $this->assertSame($ends_at, $course->getEndsAt());
     }
 

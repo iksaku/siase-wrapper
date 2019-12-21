@@ -3,4 +3,18 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="PhpEntryPointsManager">
+    <entry_point>
+      <entry_point TYPE="phpMethod" FQNAME="\SIASE\Models\Student login" />
+      <entry_point TYPE="phpMethod" FQNAME="\SIASE\Models\Model toJSON" />
+      <entry_point TYPE="phpMethod" FQNAME="\SIASE\Encoders\StudentEncoder decode" />
+      <entry_point TYPE="phpMethod" FQNAME="\SIASE\Encoders\ScheduleEncoder decode" />
+      <entry_point TYPE="phpMethod" FQNAME="\SIASE\Encoders\KardexEncoder decode" />
+    </entry_point>
+    <pattern value="\SIASE\Models\Student" member="login" />
+    <pattern value="\SIASE\Models\Model" member="toJSON" />
+    <pattern value="\SIASE\Encoders\StudentEncoder" member="decode" />
+    <pattern value="\SIASE\Encoders\ScheduleEncoder" member="decode" />
+    <pattern value="\SIASE\Encoders\KardexEncoder" member="decode" />
+  </component>
 </project>
