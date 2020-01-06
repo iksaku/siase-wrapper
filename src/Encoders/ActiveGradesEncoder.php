@@ -2,23 +2,22 @@
 
 namespace SIASE\Encoders;
 
-use SIASE\Exceptions\KardexException;
+use SIASE\Exceptions\ActiveGradesException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
-class KardexEncoder extends XmlEncoder
+class ActiveGradesEncoder extends XmlEncoder
 {
     /**
      * {@inheritdoc}
-     * @throws KardexException
      */
     public function decode(string $data, string $format, array $context = [])
     {
         // Decode XML data
         $decoded = parent::decode($data, $format, $context);
 
-        // Look for Kardex errors
-        if (filter_var($decoded['vlError'], FILTER_VALIDATE_BOOLEAN)) {
-            throw new KardexException($context['student']);
+        // Look for Active Grades errors
+        if (filter_var($decoded['plgError'], FILTER_VALIDATE_BOOLEAN)) {
+            throw new ActiveGradesException($context['student']);
         }
 
         // Map object data
@@ -31,9 +30,9 @@ class KardexEncoder extends XmlEncoder
             return [
                 'courseName' => $gradeData['Materia'],
                 'grade' => (int) $gradeData['Calificacion'],
-                'semester' => (int) $gradeData['Semestre'],
+                'opportunity' => (int) $gradeData['Oportunidad'],
             ];
-        }, $decoded['ttKdx']['ttKdxRow']);
+        }, $decoded['ttCalif']['ttCalifRow']);
 
         // Return decoded data
         return $data;

@@ -2,12 +2,14 @@
 
 namespace SIASE\Encoders;
 
+use SIASE\Exceptions\ScheduleException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class ScheduleEncoder extends XmlEncoder
 {
     /**
      * {@inheritdoc}
+     * @throws ScheduleException
      */
     public function decode(string $data, string $format, array $context = [])
     {
@@ -16,7 +18,7 @@ class ScheduleEncoder extends XmlEncoder
 
         // Look for Schedule Errors
         if (filter_var($decoded['plgError'], FILTER_VALIDATE_BOOLEAN)) {
-            return ['error' => true];
+            throw new ScheduleException($context['student']);
         }
 
         // Map object data

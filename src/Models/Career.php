@@ -8,6 +8,12 @@ namespace SIASE\Models;
 class Career extends Model
 {
     /**
+     * Token that identifies the Student in the Career it belongs to.
+     * @var string
+     */
+    protected $cve;
+
+    /**
      * Name of the Career.
      * @var string
      */
@@ -20,21 +26,31 @@ class Career extends Model
     protected $shortName;
 
     /**
-     * Token that identifies the Student in the Career it belongs to.
-     * @var string
-     */
-    protected $cve;
-
-    /**
      * Career constructor.
+     * @param string $cve
      * @param string $name
      * @param string $shortName
-     * @param string $cve
      */
-    public function __construct(string $name, string $shortName, string $cve)
+    public function __construct(string $cve, string $name, string $shortName)
     {
         $this->name = $name;
         $this->shortName = $shortName;
+        $this->cve = $cve;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCve(): string
+    {
+        return $this->cve;
+    }
+
+    /**
+     * @param string $cve
+     */
+    public function setCve(string $cve)
+    {
         $this->cve = $cve;
     }
 
@@ -68,21 +84,5 @@ class Career extends Model
     public function setShortName(string $shortName)
     {
         $this->shortName = $shortName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCve(): string
-    {
-        return $this->cve;
-    }
-
-    /**
-     * @param string $cve
-     */
-    public function setCve(string $cve)
-    {
-        $this->cve = $cve;
     }
 }

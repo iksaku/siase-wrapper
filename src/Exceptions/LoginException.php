@@ -2,10 +2,10 @@
 
 namespace SIASE\Exceptions;
 
-use Exception;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Throwable;
 
-class LoginException extends Exception
+class LoginException extends UnexpectedValueException
 {
     /**
      * LoginException constructor.

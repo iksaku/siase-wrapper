@@ -35,7 +35,7 @@ abstract class Model
     /**
      * @return Serializer
      */
-    final public static function serializer(): Serializer
+    public static function getSerializer(): Serializer
     {
         return new Serializer(static::getNormalizers(), static::getEncoders());
     }
@@ -46,7 +46,7 @@ abstract class Model
      */
     public function toArray(): array
     {
-        return static::serializer()->normalize($this);
+        return static::getSerializer()->normalize($this);
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class Model
      */
     public function toJSON(): string
     {
-        return static::serializer()->serialize($this, 'json');
+        return static::getSerializer()->serialize($this, 'json');
     }
 
     /**

@@ -2,92 +2,39 @@
 
 namespace SIASE\Models;
 
+use GuzzleHttp\Promise\Promise;
+use function GuzzleHttp\Promise\settle;
 use Psr\Http\Message\ResponseInterface;
+use SIASE\Api\RequestArgument;
+use SIASE\Api\RequestType;
 use SIASE\Encoders\StudentEncoder;
 use SIASE\Exceptions\LoginException;
+use SIASE\Models\ActiveGrades\ActiveGrades;
 use SIASE\Models\Kardex\Kardex;
 use SIASE\Models\Schedule\Schedule;
-use SIASE\Requests\Request;
-use SIASE\Requests\RequestArgument;
-use SIASE\Requests\RequestType;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Throwable;
 
 /**
  * Class Student.
  */
 class Student extends Model
 {
-    const LOGIN_STUDENT_ID_ARGUMENT = '108be0d';
-
-    const LOGIN_STUDENT_PASSWORD_ARGUMENT = 'd937aa6b';
-
-    const LOGIN_TYPE_ARGUMENT = '0c19de58';
-
-    const LOGIN_TYPE_STUDENT = '01';
-
-    const /* @noinspection PhpUnused */
-        LOGIN_TYPE_TEACHER = '02';
-
-    /**
-     * Id of the Student (Also known as 'Matricula').
-     * @var int
-     */
-    protected $id;
-
-    /**
-     * Name of the Student.
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Login token of the Student.
-     * @var string
-     */
-    protected $trim;
-
-    /**
-     * Careers to which the Student has belonged to.
-     * @var Career[]
-     */
-    protected $careers;
-
-    /**
-     * Return the Career to which Student currently belongs.
-     * @var Career
-     */
-    protected $currentCareer;
-
-    /**
-     * Kardex of Student.
-     * @var Kardex
-     */
-    protected $kardex;
-
-    /**
-     * Currently active schedule of Student.
-     * @var Schedule
-     */
-    protected $schedule;
-
     /**
      * Student constructor.
      * @param int $id
      * @param string $name
-     * @param string $trim
+     * @param string $token
      * @param Career[] $careers
      * @param Career|null $currentCareer
      */
-    public function __construct(int $id, string $name, string $trim, array $careers = [], Career $currentCareer = null)
+    public function __construct(int $id, string $name, string $token, array $careers = [], Career $currentCareer = null)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->trim = $trim;
+        $this->token = $token;
         $this->careers = $careers;
         $this->currentCareer = $currentCareer;
     }
@@ -128,30 +75,54 @@ class Student extends Model
     public static function login(int $id, string $password): self
     {
         /** @var ResponseInterface $response */
-        $response = Request::make([
+        $response = client()->get('', [
             'query' => [
-                self::LOGIN_STUDENT_ID_ARGUMENT => $id,
-                self::LOGIN_STUDENT_PASSWORD_ARGUMENT => $password,
-                self::LOGIN_TYPE_ARGUMENT => self::LOGIN_TYPE_STUDENT,
                 RequestArgument::REQUEST_TYPE => RequestType::LOGIN,
+                RequestArgument::LOGIN_TYPE => RequestArgument::LOGIN_TYPE_STUDENT,
+                RequestArgument::LOGIN_ID => $id,
+                RequestArgument::LOGIN_PASSWORD => $password,
             ],
         ]);
 
-        /** @var Serializer $serializer */
-        $serializer = static::serializer();
-
-        /** @var array $data */
-        $data = $serializer->decode($response->getBody()->getContents(), 'xml');
-
-        if (isset($data['error']) && $data['error']) {
-            throw new LoginException();
-        }
-
         /** @var Student $student */
-        $student = $serializer->denormalize($data, static::class);
+        $student = static::getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            static::class,
+            'xml'
+        );
 
         return $student;
     }
+
+    /**
+     * @param string|string[] $data
+     * @return $this
+     */
+    public function load($data): self
+    {
+        if (!is_array($data)) {
+            $data = [$data];
+        }
+
+        $promises = [];
+
+        foreach ($data as $d) {
+            $method = 'request'.ucfirst($d);
+            if (method_exists($this, $method)) {
+                $promises[] = $this->$method();
+            }
+        }
+
+        settle($promises)->wait(false);
+
+        return $this;
+    }
+
+    /**
+     * Id of the Student (Also known as 'Matricula').
+     * @var int
+     */
+    protected $id;
 
     /**
      * @return int
@@ -170,6 +141,12 @@ class Student extends Model
     }
 
     /**
+     * Name of the Student.
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -186,20 +163,32 @@ class Student extends Model
     }
 
     /**
+     * Login token of the Student.
+     * @var string
+     */
+    protected $token;
+
+    /**
      * @return string
      */
-    public function getTrim(): string
+    public function getToken(): string
     {
-        return $this->trim;
+        return $this->token;
     }
 
     /**
-     * @param string $trim
+     * @param string $token
      */
-    public function setTrim(string $trim)
+    public function setToken(string $token)
     {
-        $this->trim = $trim;
+        $this->token = $token;
     }
+
+    /**
+     * Careers to which the Student has belonged to.
+     * @var Career[]
+     */
+    protected $careers;
 
     /**
      * @return Career[]
@@ -215,49 +204,141 @@ class Student extends Model
     public function setCareers(array $careers)
     {
         $this->careers = $careers;
-        $this->setCurrentCareer();
+        $this->setCurrentCareer(array_last($careers));
     }
+
+    /**
+     * Career to which Student currently belongs.
+     * @var Career
+     */
+    protected $currentCareer;
 
     /**
      * @return Career|null
      */
     public function getCurrentCareer()
     {
-        if (empty($this->currentCareer)) {
-            $this->setCurrentCareer();
-        }
-
         return $this->currentCareer;
     }
 
     /**
      * @param Career $currentCareer
      */
-    public function setCurrentCareer(Career $currentCareer = null)
+    public function setCurrentCareer(Career $currentCareer)
     {
-        if (empty($currentCareer) && !empty($this->getCareers())) {
-            $currentCareer = $this->getCareers()[count($this->careers) - 1];
-        }
-
         $this->currentCareer = $currentCareer;
     }
 
     /**
-     * @param bool $fetch
-     * If set to False, we'll not try to fetch the current
-     * Kardex even if there's no kardex currently available
-     * @return Kardex
+     * Active Grades of Student.
+     * @var ActiveGrades
      */
-    public function getKardex(bool $fetch = true)
-    {
-        if (empty($this->kardex) && $fetch) {
-            try {
-                $this->setKardex(Kardex::fetchFor($this));
-            } catch (Throwable $e) {
-                trigger_error($e->getMessage());
-            }
-        }
+    protected $activeGrades;
 
+    /**
+     * @return Promise
+     */
+    protected function requestActiveGrades(): Promise
+    {
+        /** @var Promise $promise */
+        $promise = new Promise(function () use (&$promise) {
+            if ($this->getActiveGrades() !== null) {
+                $promise->resolve($this->getActiveGrades());
+
+                return;
+            }
+
+            client()->getAsync('', [
+                'query' => [
+                    RequestArgument::REQUEST_TYPE => RequestType::ACTIVE_GRADES,
+                    RequestArgument::STUDENT_ID => $this->getId(),
+                    RequestArgument::STUDENT_CAREER_CVE => $this->getCurrentCareer()->getCve(),
+                ],
+            ])
+                ->then(function (ResponseInterface $response) use ($promise) {
+                    /** @var ActiveGrades $activeGrades */
+                    $activeGrades = ActiveGrades::getSerializer()->deserialize(
+                        $response->getBody()->getContents(),
+                        ActiveGrades::class,
+                        'xml',
+                        ['student' => $this]
+                    );
+
+                    $this->setActiveGrades($activeGrades);
+
+                    $promise->resolve($activeGrades);
+                })->wait();
+        });
+
+        return $promise;
+    }
+
+    /**
+     * @return ActiveGrades|null
+     */
+    public function getActiveGrades()
+    {
+        return $this->activeGrades;
+    }
+
+    /**
+     * @param ActiveGrades $activeGrades
+     */
+    public function setActiveGrades(ActiveGrades $activeGrades): void
+    {
+        $this->activeGrades = $activeGrades;
+    }
+
+    /**
+     * Kardex of Student.
+     * @var Kardex
+     */
+    protected $kardex;
+
+    /**
+     * @return Promise
+     */
+    protected function requestKardex(): Promise
+    {
+        /** @var Promise $promise */
+        $promise = new Promise(function () use (&$promise) {
+            if ($this->getKardex() !== null) {
+                $promise->resolve($this->getKardex());
+
+                return;
+            }
+
+            client()->getAsync('', [
+                'query' => [
+                    RequestArgument::REQUEST_TYPE => RequestType::KARDEX,
+                    RequestArgument::STUDENT_ID => $this->getId(),
+                    RequestArgument::STUDENT_CAREER_CVE => $this->getCurrentCareer()->getCve(),
+                ],
+            ])
+                ->then(function (ResponseInterface $response) use ($promise) {
+                    /** @var Kardex $kardex */
+                    $kardex = Kardex::getSerializer()->deserialize(
+                        $response->getBody()->getContents(),
+                        Kardex::class,
+                        'xml',
+                        ['student' => $this]
+                    );
+
+                    $this->setKardex($kardex);
+
+                    $promise->resolve($kardex);
+                })
+                ->wait();
+        });
+
+        return $promise;
+    }
+
+    /**
+     * @return Kardex|null
+     */
+    public function getKardex()
+    {
         return $this->kardex;
     }
 
@@ -270,21 +351,55 @@ class Student extends Model
     }
 
     /**
-     * @param bool $fetch
-     * If set to False, we'll not try to fetch the current
-     * Schedule even if there's no schedule currently available
+     * Currently active schedule of Student.
+     * @var Schedule
+     */
+    protected $schedule;
+
+    /**
+     * @return Promise
+     */
+    protected function requestSchedule(): Promise
+    {
+        /** @var Promise $promise */
+        $promise = new Promise(function () use (&$promise) {
+            if ($this->getSchedule() !== null) {
+                $promise->resolve($this->getSchedule());
+
+                return;
+            }
+
+            $promise = client()->getAsync('', [
+                'query' => [
+                    RequestArgument::REQUEST_TYPE => RequestType::SCHEDULE,
+                    RequestArgument::STUDENT_ID => $this->getId(),
+                    RequestArgument::STUDENT_CAREER_CVE => $this->getCurrentCareer()->getCve(),
+                ],
+            ])
+                ->then(function (ResponseInterface $response) use ($promise) {
+                    /** @var Schedule $schedule */
+                    $schedule = Schedule::getSerializer()->deserialize(
+                        $response->getBody()->getContents(),
+                        Schedule::class,
+                        'xml',
+                        ['student' => $this]
+                    );
+
+                    $this->setSchedule($schedule);
+
+                    $promise->resolve($schedule);
+                })
+                ->wait();
+        });
+
+        return $promise;
+    }
+
+    /**
      * @return Schedule|null
      */
-    public function getSchedule(bool $fetch = true)
+    public function getSchedule()
     {
-        if (empty($this->schedule) && $fetch) {
-            try {
-                $this->setSchedule(Schedule::fetchFor($this));
-            } catch (Throwable $e) {
-                trigger_error($e->getMessage());
-            }
-        }
-
         return $this->schedule;
     }
 

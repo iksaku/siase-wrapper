@@ -20,7 +20,7 @@ class ScheduleTest extends TestCase
             [
                 $period = 'First Semester',
                 $courses = [],
-                new Schedule($period, $courses),
+                new Schedule($courses, $period),
             ],
         ];
     }

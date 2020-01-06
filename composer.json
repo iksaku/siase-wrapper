@@ -12,14 +12,15 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.2",
+        "php": "^7.2",
         "guzzlehttp/guzzle": "^6.3",
         "ext-simplexml": "*",
         "nesbot/carbon": "^2.22",
         "ext-json": "*",
         "symfony/serializer": "^5.0",
         "symfony/property-info": "^5.0",
-        "fzaninotto/faker": "^1.8"
+        "fzaninotto/faker": "^1.8",
+        "symfony/property-access": "^5.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",
@@ -39,7 +40,10 @@
     "autoload": {
         "psr-4": {
             "SIASE\\": "src/"
-        }
+        },
+        "files": [
+            "src/helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

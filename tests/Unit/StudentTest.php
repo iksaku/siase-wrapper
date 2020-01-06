@@ -4,6 +4,7 @@
 
 namespace SIASE\Tests\Unit;
 
+use SIASE\Models\ActiveGrades\ActiveGrades;
 use SIASE\Models\Career;
 use SIASE\Models\Kardex\Grade;
 use SIASE\Models\Kardex\Kardex;
@@ -72,10 +73,10 @@ class StudentTest extends TestCase
      */
     public function test_student_trim(int $id, string $name, string $trim, array $careers, Student $student)
     {
-        $this->assertSame($trim, $student->getTrim());
+        $this->assertSame($trim, $student->getToken());
 
-        $student->setTrim($trim = (string) $this->getFaker()->numberBetween());
-        $this->assertSame($trim, $student->getTrim());
+        $student->setToken($trim = (string) $this->getFaker()->numberBetween());
+        $this->assertSame($trim, $student->getToken());
     }
 
     /**
@@ -92,7 +93,7 @@ class StudentTest extends TestCase
         $this->assertEmpty($student->getCareers());
 
         $student->setCareers($careers = [
-            new Career('Magical Career', 'mc', ''),
+            new Career('', 'Magical Career', 'mc'),
         ]);
         $this->assertSame($careers, $student->getCareers());
         $this->assertNotEmpty($student->getCareers());
@@ -112,13 +113,31 @@ class StudentTest extends TestCase
         $this->assertEmpty($student->getCurrentCareer());
 
         $student->setCareers($careers = [
-            new Career('Imaginary Career', 'ic', ''),
-            new Career('Second Imaginary Career', 'sic', ''),
+            new Career('', 'Imaginary Career', 'ic'),
+            new Career('', 'Second Imaginary Career', 'sic'),
         ]);
         $this->assertSame($careers[1], $student->getCurrentCareer());
 
-        $student->setCurrentCareer($new_career = new Career('New Career', 'nc', ''));
+        $student->setCurrentCareer($new_career = new Career('', 'New Career', 'nc'));
         $this->assertSame($new_career, $student->getCurrentCareer());
+    }
+
+    /**
+     * @param int $id
+     * @param string $name
+     * @param string $trim
+     * @param array $careers
+     * @param Student $student
+     * @dataProvider student_provider
+     */
+    public function test_student_active_grades(int $id, string $name, string $trim, array $careers, Student $student)
+    {
+        $this->assertEmpty($student->getActiveGrades());
+
+        $student->setActiveGrades($activeGrades = new ActiveGrades([
+            new Grade('Dark Nebula', 100, 1),
+        ]));
+        $this->assertSame($activeGrades, $student->getActiveGrades());
     }
 
     /**
@@ -134,7 +153,7 @@ class StudentTest extends TestCase
         $this->assertEmpty($student->getKardex(false));
 
         $student->setKardex($kardex = new Kardex([
-            new Grade(0, 'Party Hard', 101),
+            new Grade('Party Hard', 101, 0),
         ]));
         $this->assertSame($kardex, $student->getKardex(false));
     }
@@ -149,9 +168,9 @@ class StudentTest extends TestCase
      */
     public function test_student_schedule(int $id, string $name, string $trim, array $careers, Student $student)
     {
-        $this->assertEmpty($student->getSchedule(false));
+        $this->assertEmpty($student->getSchedule());
 
-        $student->setSchedule($schedule = new Schedule('0-Infinity', []));
-        $this->assertSame($schedule, $student->getSchedule(false));
+        $student->setSchedule($schedule = new Schedule([], '0-Infinity'));
+        $this->assertSame($schedule, $student->getSchedule());
     }
 }

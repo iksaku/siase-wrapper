@@ -2,12 +2,14 @@
 
 namespace SIASE\Encoders;
 
+use SIASE\Exceptions\LoginException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class StudentEncoder extends XmlEncoder
 {
     /**
      * {@inheritdoc}
+     * @throws LoginException
      */
     public function decode(string $data, string $format, array $context = [])
     {
@@ -16,16 +18,14 @@ class StudentEncoder extends XmlEncoder
 
         // Look for login errors
         if (filter_var($decoded['ttError']['ttErrorRow']['lError'], FILTER_VALIDATE_BOOLEAN)) {
-            return [
-                'error' => true,
-            ];
+            throw new LoginException();
         }
 
         // Map object data
         $data = [
             'id' => (int) $decoded['pochMatricula'],
             'name' => $decoded['pochNombre'],
-            'trim' => $decoded['poinTrim'],
+            'token' => $decoded['poinTrim'],
             'careers' => [],
             'currentCareer' => null,
         ];
@@ -46,6 +46,11 @@ class StudentEncoder extends XmlEncoder
                 'cve' => $careerData['CveCarrera'],
             ];
         }, $decodedCareers);
+
+        // Assign the Current Career
+        if (!empty($data['careers'])) {
+            $data['currentCareer'] = array_last($data['careers']);
+        }
 
         // Return decoded data
         return $data;

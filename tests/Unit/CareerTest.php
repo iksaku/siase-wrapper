@@ -24,7 +24,7 @@ class CareerTest extends TestCase
                 $name,
                 $short_name,
                 $cve = dechex($faker->numberBetween(10, 10000)),
-                new Career($name, $short_name, $cve),
+                new Career($cve, $name, $short_name),
             ],
         ];
     }

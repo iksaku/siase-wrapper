@@ -16,22 +16,22 @@ class GradeTest extends TestCase
     {
         return [
             [
-                $semester = 1,
                 $courseName = 'Unique Course',
                 $grade = 70,
-                new Grade($semester, $courseName, $grade),
+                $semester = 1,
+                new Grade($courseName, $grade, $semester),
             ],
         ];
     }
 
     /**
-     * @param int $semester
      * @param string $courseName
      * @param int $intGrade
+     * @param int $semester
      * @param Grade $grade
      * @dataProvider grade_provider
      */
-    public function test_grade_semester(int $semester, string $courseName, int $intGrade, Grade $grade)
+    public function test_grade_semester(string $courseName, int $intGrade, int $semester, Grade $grade)
     {
         $this->assertSame($semester, $grade->getSemester());
 
@@ -40,13 +40,13 @@ class GradeTest extends TestCase
     }
 
     /**
-     * @param int $semester
      * @param string $courseName
      * @param int $intGrade
+     * @param int $semester
      * @param Grade $grade
      * @dataProvider grade_provider
      */
-    public function test_grade_course_name(int $semester, string $courseName, int $intGrade, Grade $grade)
+    public function test_grade_course_name(string $courseName, int $intGrade, int $semester, Grade $grade)
     {
         $this->assertSame($courseName, $grade->getCourseName());
 
@@ -55,13 +55,13 @@ class GradeTest extends TestCase
     }
 
     /**
-     * @param int $semester
      * @param string $courseName
      * @param int $intGrade
+     * @param int $semester
      * @param Grade $grade
      * @dataProvider grade_provider
      */
-    public function test_grade_grade(int $semester, string $courseName, int $intGrade, Grade $grade)
+    public function test_grade_grade(string $courseName, int $intGrade, int $semester, Grade $grade)
     {
         $this->assertSame($intGrade, $grade->getGrade());
 

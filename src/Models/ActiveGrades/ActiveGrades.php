@@ -1,23 +1,23 @@
 <?php
 
-namespace SIASE\Models\Kardex;
+namespace SIASE\Models\ActiveGrades;
 
-use SIASE\Encoders\KardexEncoder;
+use SIASE\Encoders\ActiveGradesEncoder;
 use SIASE\Models\Model;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class Kardex extends Model
+class ActiveGrades extends Model
 {
     /**
-     * List of grades in the Kardex.
+     * List of grades in the Active Grade.
      * @var Grade[]
      */
     protected $grades;
 
     /**
-     * Kardex constructor.
+     * ActiveGrades constructor.
      * @param Grade[] $grades
      */
     public function __construct(array $grades)
@@ -47,7 +47,7 @@ class Kardex extends Model
     protected static function getEncoders(): array
     {
         return array_merge([
-            new KardexEncoder(),
+            new ActiveGradesEncoder(),
         ], parent::getEncoders());
     }
 
@@ -62,9 +62,8 @@ class Kardex extends Model
     /**
      * @param Grade[] $grades
      */
-    public function setGrades(array $grades)
+    public function setGrades(array $grades): void
     {
-        sort($grades, SORT_REGULAR);
         $this->grades = $grades;
     }
 }

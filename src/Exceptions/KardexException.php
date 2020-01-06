@@ -2,11 +2,11 @@
 
 namespace SIASE\Exceptions;
 
-use Exception;
 use SIASE\Models\Student;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Throwable;
 
-class KardexException extends Exception
+class KardexException extends UnexpectedValueException
 {
     /**
      * KardexException constructor.

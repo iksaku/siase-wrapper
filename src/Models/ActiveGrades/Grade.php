@@ -1,6 +1,6 @@
 <?php
 
-namespace SIASE\Models\Kardex;
+namespace SIASE\Models\ActiveGrades;
 
 use SIASE\Models\Model;
 
@@ -19,22 +19,22 @@ class Grade extends Model
     protected $grade;
 
     /**
-     * Semester on which Course was completed.
+     * Opportunity in which the Course is being held.
      * @var int
      */
-    protected $semester;
+    protected $opportunity;
 
     /**
      * Grade constructor.
      * @param string $courseName
      * @param int $grade
-     * @param int $semester
+     * @param int $opportunity
      */
-    public function __construct(string $courseName, int $grade, int $semester)
+    public function __construct(string $courseName, int $grade, int $opportunity)
     {
-        $this->semester = $semester;
         $this->courseName = $courseName;
         $this->grade = $grade;
+        $this->opportunity = $opportunity;
     }
 
     /**
@@ -72,16 +72,16 @@ class Grade extends Model
     /**
      * @return int
      */
-    public function getSemester(): int
+    public function getOpportunity(): int
     {
-        return $this->semester;
+        return $this->opportunity;
     }
 
     /**
-     * @param int $semester
+     * @param int $opportunity
      */
-    public function setSemester(int $semester): void
+    public function setOpportunity(int $opportunity): void
     {
-        $this->semester = $semester;
+        $this->opportunity = $opportunity;
     }
 }

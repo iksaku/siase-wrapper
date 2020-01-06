@@ -31,8 +31,8 @@ class KardexTest extends TestCase
         $this->assertSame($grades, $kardex->getGrades());
 
         $kardex->setGrades($grades = [
-            new Grade(1, 'First Course', 70),
-            new Grade(2, 'Second Course', 80),
+            new Grade('First Course', 70, 1),
+            new Grade('Second Course', 80, 2),
         ]);
         $this->assertSame($grades, $kardex->getGrades());
     }
