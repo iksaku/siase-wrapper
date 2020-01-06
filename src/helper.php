@@ -25,6 +25,7 @@ if (!function_exists('array_last')) {
     {
         $last = end($array);
         reset($array);
+
         return $last;
     }
 }

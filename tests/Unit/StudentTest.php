@@ -109,7 +109,6 @@ class StudentTest extends TestCase
      */
     public function test_student_current_career(int $id, string $name, string $trim, array $careers, Student $student)
     {
-        $student->setCurrentCareer(null);
         $this->assertEmpty($student->getCurrentCareer());
 
         $student->setCareers($careers = [
