@@ -2,14 +2,14 @@
 
 /** @noinspection PhpUnusedParameterInspection */
 
-namespace SIASE\Tests\Unit;
+namespace iksaku\SIASE\Tests\Unit;
 
-use SIASE\Models\ActiveGrades\ActiveGrades;
-use SIASE\Models\Career;
-use SIASE\Models\Kardex\Grade;
-use SIASE\Models\Kardex\Kardex;
-use SIASE\Models\Schedule\Schedule;
-use SIASE\Models\Student;
+use iksaku\SIASE\Models\ActiveGrades\ActiveGrades;
+use iksaku\SIASE\Models\Career;
+use iksaku\SIASE\Models\Kardex\Grade;
+use iksaku\SIASE\Models\Kardex\Kardex;
+use iksaku\SIASE\Models\Schedule\Schedule;
+use iksaku\SIASE\Models\Student;
 
 class StudentTest extends TestCase
 {

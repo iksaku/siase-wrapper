@@ -39,7 +39,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SIASE\\": "src/"
+            "iksaku\\SIASE\\": "src/"
         },
         "files": [
             "src/helper.php"
@@ -47,7 +47,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "SIASE\\Tests\\": "tests/"
+            "iksaku\\SIASE\\Tests\\": "tests/"
         }
     },
     "scripts": {

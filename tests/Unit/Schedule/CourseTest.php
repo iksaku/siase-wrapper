@@ -2,11 +2,11 @@
 
 /** @noinspection PhpUnusedParameterInspection */
 
-namespace SIASE\Tests\Unit\Schedule;
+namespace iksaku\SIASE\Tests\Unit\Schedule;
 
 use Carbon\Carbon;
-use SIASE\Models\Schedule\Course;
-use SIASE\Tests\Unit\TestCase;
+use iksaku\SIASE\Models\Schedule\Course;
+use iksaku\SIASE\Tests\Unit\TestCase;
 
 class CourseTest extends TestCase
 {

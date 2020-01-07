@@ -1,9 +1,9 @@
 <?php
 
-namespace SIASE\Models\Schedule;
+namespace iksaku\SIASE\Models\Schedule;
 
 use BadMethodCallException;
-use SIASE\Models\Model;
+use iksaku\SIASE\Models\Model;
 
 /**
  * Class Course.

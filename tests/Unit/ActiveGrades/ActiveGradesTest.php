@@ -1,10 +1,10 @@
 <?php
 
-namespace SIASE\Tests\Unit\ActiveGrades;
+namespace iksaku\SIASE\Tests\Unit\ActiveGrades;
 
-use SIASE\Models\ActiveGrades\ActiveGrades;
-use SIASE\Models\ActiveGrades\Grade;
-use SIASE\Tests\Unit\TestCase;
+use iksaku\SIASE\Models\ActiveGrades\ActiveGrades;
+use iksaku\SIASE\Models\ActiveGrades\Grade;
+use iksaku\SIASE\Tests\Unit\TestCase;
 
 class ActiveGradesTest extends TestCase
 {

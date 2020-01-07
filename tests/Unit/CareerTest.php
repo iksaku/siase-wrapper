@@ -2,9 +2,9 @@
 
 /** @noinspection PhpUnusedParameterInspection */
 
-namespace SIASE\Tests\Unit;
+namespace iksaku\SIASE\Tests\Unit;
 
-use SIASE\Models\Career;
+use iksaku\SIASE\Models\Career;
 
 class CareerTest extends TestCase
 {

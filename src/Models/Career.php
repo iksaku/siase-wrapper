@@ -1,6 +1,6 @@
 <?php
 
-namespace SIASE\Models;
+namespace iksaku\SIASE\Models;
 
 /**
  * Class Career.

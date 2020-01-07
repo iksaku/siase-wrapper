@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Encoders;
+namespace iksaku\SIASE\Encoders;
 
-use SIASE\Exceptions\KardexException;
+use iksaku\SIASE\Exceptions\KardexException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class KardexEncoder extends XmlEncoder

@@ -1,9 +1,9 @@
 <?php
 
-namespace SIASE\Models\Schedule;
+namespace iksaku\SIASE\Models\Schedule;
 
-use SIASE\Encoders\ScheduleEncoder;
-use SIASE\Models\Model;
+use iksaku\SIASE\Encoders\ScheduleEncoder;
+use iksaku\SIASE\Models\Model;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;

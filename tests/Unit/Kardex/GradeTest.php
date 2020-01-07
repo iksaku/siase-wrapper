@@ -2,10 +2,10 @@
 
 /** @noinspection PhpUnusedParameterInspection */
 
-namespace SIASE\Tests\Unit\Kardex;
+namespace iksaku\SIASE\Tests\Unit\Kardex;
 
-use SIASE\Models\Kardex\Grade;
-use SIASE\Tests\Unit\TestCase;
+use iksaku\SIASE\Models\Kardex\Grade;
+use iksaku\SIASE\Tests\Unit\TestCase;
 
 class GradeTest extends TestCase
 {

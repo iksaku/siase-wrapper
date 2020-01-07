@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Exceptions;
+namespace iksaku\SIASE\Exceptions;
 
-use SIASE\Models\Student;
+use iksaku\SIASE\Models\Student;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Throwable;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Encoders;
+namespace iksaku\SIASE\Encoders;
 
-use SIASE\Exceptions\ScheduleException;
+use iksaku\SIASE\Exceptions\ScheduleException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class ScheduleEncoder extends XmlEncoder

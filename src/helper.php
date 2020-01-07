@@ -12,6 +12,8 @@ if (!function_exists('client')) {
     {
         return new Client([
             'base_uri' => SIASE_ENDPOINT,
+            'timeout' => 5,
+            'connect_timeout' => 5,
         ]);
     }
 }

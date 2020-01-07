@@ -1,6 +1,6 @@
 <?php
 
-namespace SIASE\Exceptions;
+namespace iksaku\SIASE\Exceptions;
 
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Throwable;

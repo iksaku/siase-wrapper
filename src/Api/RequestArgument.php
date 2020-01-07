@@ -1,6 +1,6 @@
 <?php
 
-namespace SIASE\Api;
+namespace iksaku\SIASE\Api;
 
 class RequestArgument
 {

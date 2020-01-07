@@ -1,17 +1,17 @@
 <?php
 
-namespace SIASE\Models;
+namespace iksaku\SIASE\Models;
 
 use GuzzleHttp\Promise\Promise;
 use function GuzzleHttp\Promise\settle;
+use iksaku\SIASE\Api\RequestArgument;
+use iksaku\SIASE\Api\RequestType;
+use iksaku\SIASE\Encoders\StudentEncoder;
+use iksaku\SIASE\Exceptions\LoginException;
+use iksaku\SIASE\Models\ActiveGrades\ActiveGrades;
+use iksaku\SIASE\Models\Kardex\Kardex;
+use iksaku\SIASE\Models\Schedule\Schedule;
 use Psr\Http\Message\ResponseInterface;
-use SIASE\Api\RequestArgument;
-use SIASE\Api\RequestType;
-use SIASE\Encoders\StudentEncoder;
-use SIASE\Exceptions\LoginException;
-use SIASE\Models\ActiveGrades\ActiveGrades;
-use SIASE\Models\Kardex\Kardex;
-use SIASE\Models\Schedule\Schedule;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;

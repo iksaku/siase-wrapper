@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Models\Kardex;
+namespace iksaku\SIASE\Models\Kardex;
 
-use SIASE\Models\Model;
+use iksaku\SIASE\Models\Model;
 
 class Grade extends Model
 {

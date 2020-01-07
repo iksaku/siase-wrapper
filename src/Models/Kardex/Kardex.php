@@ -1,9 +1,9 @@
 <?php
 
-namespace SIASE\Models\Kardex;
+namespace iksaku\SIASE\Models\Kardex;
 
-use SIASE\Encoders\KardexEncoder;
-use SIASE\Models\Model;
+use iksaku\SIASE\Encoders\KardexEncoder;
+use iksaku\SIASE\Models\Model;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;

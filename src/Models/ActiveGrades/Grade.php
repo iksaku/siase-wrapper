@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Models\ActiveGrades;
+namespace iksaku\SIASE\Models\ActiveGrades;
 
-use SIASE\Models\Model;
+use iksaku\SIASE\Models\Model;
 
 class Grade extends Model
 {

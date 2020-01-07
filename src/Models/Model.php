@@ -1,6 +1,6 @@
 <?php
 
-namespace SIASE\Models;
+namespace iksaku\SIASE\Models;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;

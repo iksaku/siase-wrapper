@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Encoders;
+namespace iksaku\SIASE\Encoders;
 
-use SIASE\Exceptions\LoginException;
+use iksaku\SIASE\Exceptions\LoginException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class StudentEncoder extends XmlEncoder

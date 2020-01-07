@@ -1,9 +1,9 @@
 <?php
 
-namespace SIASE\Models\ActiveGrades;
+namespace iksaku\SIASE\Models\ActiveGrades;
 
-use SIASE\Encoders\ActiveGradesEncoder;
-use SIASE\Models\Model;
+use iksaku\SIASE\Encoders\ActiveGradesEncoder;
+use iksaku\SIASE\Models\Model;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;

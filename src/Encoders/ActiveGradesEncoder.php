@@ -1,8 +1,8 @@
 <?php
 
-namespace SIASE\Encoders;
+namespace iksaku\SIASE\Encoders;
 
-use SIASE\Exceptions\ActiveGradesException;
+use iksaku\SIASE\Exceptions\ActiveGradesException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class ActiveGradesEncoder extends XmlEncoder
