@@ -2,7 +2,7 @@
     "name": "iksaku/siase-wrapper",
     "description": "A PHP Wrapper for various endpoints in the SIASE system",
     "type": "library",
-    "license": "AGLP-3.0",
+    "license": "AGPL-3.0",
     "authors": [
         {
             "name": "Jorge González",
