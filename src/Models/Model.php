@@ -2,15 +2,16 @@
 
 namespace iksaku\SIASE\Models;
 
+use JsonSerializable;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class Model.
  */
-abstract class Model
+abstract class Model implements JsonSerializable
 {
     /**
      * @return array
@@ -18,7 +19,7 @@ abstract class Model
     protected static function getNormalizers(): array
     {
         return [
-            new GetSetMethodNormalizer(),
+            new PropertyNormalizer(),
         ];
     }
 
@@ -52,7 +53,15 @@ abstract class Model
     /**
      * @return string
      */
-    public function toJSON(): string
+    public function toJson(): string
+    {
+        return $this->jsonSerialize();
+    }
+
+    /**
+     * @return string
+     */
+    public function jsonSerialize(): string
     {
         return static::getSerializer()->serialize($this, 'json');
     }

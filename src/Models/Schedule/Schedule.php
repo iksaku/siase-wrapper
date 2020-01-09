@@ -4,9 +4,6 @@ namespace iksaku\SIASE\Models\Schedule;
 
 use iksaku\SIASE\Encoders\ScheduleEncoder;
 use iksaku\SIASE\Models\Model;
-use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * Class Schedule.
@@ -34,22 +31,6 @@ class Schedule extends Model
     {
         $this->period = $period;
         $this->courses = $courses;
-    }
-
-    /**
-     * @return array
-     */
-    protected static function getNormalizers(): array
-    {
-        return [
-            new ObjectNormalizer(
-                null,
-                null,
-                null,
-                new PhpDocExtractor()
-            ),
-            new ArrayDenormalizer(),
-        ];
     }
 
     /**

@@ -4,9 +4,6 @@ namespace iksaku\SIASE\Models\ActiveGrades;
 
 use iksaku\SIASE\Encoders\ActiveGradesEncoder;
 use iksaku\SIASE\Models\Model;
-use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class ActiveGrades extends Model
 {
@@ -23,22 +20,6 @@ class ActiveGrades extends Model
     public function __construct(array $grades)
     {
         $this->grades = $grades;
-    }
-
-    /**
-     * @return array
-     */
-    protected static function getNormalizers(): array
-    {
-        return [
-            new ObjectNormalizer(
-                null,
-                null,
-                null,
-                new PhpDocExtractor()
-            ),
-            new ArrayDenormalizer(),
-        ];
     }
 
     /**

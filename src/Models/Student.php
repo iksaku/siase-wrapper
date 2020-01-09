@@ -12,10 +12,7 @@ use iksaku\SIASE\Models\ActiveGrades\ActiveGrades;
 use iksaku\SIASE\Models\Kardex\Kardex;
 use iksaku\SIASE\Models\Schedule\Schedule;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * Class Student.
@@ -37,22 +34,6 @@ class Student extends Model
         $this->token = $token;
         $this->careers = $careers;
         $this->currentCareer = $currentCareer;
-    }
-
-    /**
-     * @return array
-     */
-    protected static function getNormalizers(): array
-    {
-        return [
-            new ObjectNormalizer(
-                null,
-                null,
-                null,
-                new PhpDocExtractor()
-            ),
-            new ArrayDenormalizer(),
-        ];
     }
 
     /**
@@ -204,7 +185,7 @@ class Student extends Model
     public function setCareers(array $careers)
     {
         $this->careers = $careers;
-        $this->setCurrentCareer(array_last($careers));
+        $this->setCurrentCareer(array_value_last($careers));
     }
 
     /**

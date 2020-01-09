@@ -18,16 +18,13 @@ if (!function_exists('client')) {
     }
 }
 
-if (!function_exists('array_last')) {
+if (!function_exists('array_value_last')) {
     /**
      * @param array|object $array
      * @return mixed
      */
-    function array_last(&$array)
+    function array_value_last($array)
     {
-        $last = end($array);
-        reset($array);
-
-        return $last;
+        return $array[array_key_last($array)];
     }
 }
