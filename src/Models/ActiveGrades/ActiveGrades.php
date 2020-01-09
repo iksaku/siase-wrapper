@@ -8,21 +8,6 @@ use iksaku\SIASE\Models\Model;
 class ActiveGrades extends Model
 {
     /**
-     * List of grades in the Active Grade.
-     * @var Grade[]
-     */
-    protected $grades;
-
-    /**
-     * ActiveGrades constructor.
-     * @param Grade[] $grades
-     */
-    public function __construct(array $grades)
-    {
-        $this->grades = $grades;
-    }
-
-    /**
      * @return array
      */
     protected static function getEncoders(): array
@@ -31,6 +16,12 @@ class ActiveGrades extends Model
             new ActiveGradesEncoder(),
         ], parent::getEncoders());
     }
+
+    /**
+     * List of grades in the Active Grade.
+     * @var Grade[]
+     */
+    protected $grades;
 
     /**
      * @return Grade[]

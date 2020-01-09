@@ -25,19 +25,6 @@ class Grade extends Model
     protected $opportunity;
 
     /**
-     * Grade constructor.
-     * @param string $courseName
-     * @param int $grade
-     * @param int $opportunity
-     */
-    public function __construct(string $courseName, int $grade, int $opportunity)
-    {
-        $this->courseName = $courseName;
-        $this->grade = $grade;
-        $this->opportunity = $opportunity;
-    }
-
-    /**
      * @return string
      */
     public function getCourseName(): string

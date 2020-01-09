@@ -24,7 +24,7 @@ class StudentEncoder extends XmlEncoder
         // Map object data
         $data = [
             'id' => (int) $decoded['pochMatricula'],
-            'name' => ucwords(strtolower($decoded['pochNombre'])),
+            'name' => $decoded['pochNombre'],
             'token' => $decoded['poinTrim'],
             'careers' => [],
             'currentCareer' => null,
@@ -41,7 +41,7 @@ class StudentEncoder extends XmlEncoder
         // Map career data
         $data['careers'] = array_map(function ($careerData) {
             return [
-                'name' => ucwords(strtolower($careerData['DesCarrera'])),
+                'name' => $careerData['DesCarrera'],
                 'shortName' => $careerData['Abreviatura'],
                 'cve' => $careerData['CveCarrera'],
             ];

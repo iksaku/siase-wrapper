@@ -11,29 +11,6 @@ use iksaku\SIASE\Models\Model;
 class Schedule extends Model
 {
     /**
-     * Contains a list of Courses to attend in the running Period.
-     * @var Course[]
-     */
-    protected $courses;
-
-    /**
-     * Represents the Period on which the schedule will be running.
-     * @var string
-     */
-    protected $period;
-
-    /**
-     * Schedule constructor.
-     * @param Course[] $courses
-     * @param string $period
-     */
-    public function __construct(array $courses, string $period)
-    {
-        $this->period = $period;
-        $this->courses = $courses;
-    }
-
-    /**
      * @return array
      */
     protected static function getEncoders(): array
@@ -42,6 +19,12 @@ class Schedule extends Model
             new ScheduleEncoder(),
         ], parent::getEncoders());
     }
+
+    /**
+     * Represents the Period on which the schedule will be running.
+     * @var string
+     */
+    protected $period;
 
     /**
      * @return string
@@ -58,6 +41,12 @@ class Schedule extends Model
     {
         $this->period = $period;
     }
+
+    /**
+     * Contains a list of Courses to attend in the running Period.
+     * @var Course[]
+     */
+    protected $courses;
 
     /**
      * @return Course[]

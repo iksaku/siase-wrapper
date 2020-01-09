@@ -23,7 +23,7 @@ class ScheduleEncoder extends XmlEncoder
 
         // Map object data
         $data = [
-            'period' => ucwords(strtolower($decoded['pchPeriodo'])),
+            'period' => $decoded['pchPeriodo'],
             'courses' => [],
         ];
 
@@ -39,7 +39,7 @@ class ScheduleEncoder extends XmlEncoder
             // Map the course data as it would normally
             $mappedCourseData = [
                 'id' => $id = (int) $courseData['Id'],
-                'name' => ucwords(strtolower($courseData['DescLMateria'])),
+                'name' => $courseData['DescLMateria'],
                 'shortName' => $courseData['DescCMateria'],
                 'days' => [
                     (int) $courseData['Dia'],

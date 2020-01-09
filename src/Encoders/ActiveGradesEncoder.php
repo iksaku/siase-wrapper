@@ -17,7 +17,7 @@ class ActiveGradesEncoder extends XmlEncoder
 
         // Look for Active Grades errors
         if (filter_var($decoded['plgError'], FILTER_VALIDATE_BOOLEAN)) {
-            throw new ActiveGradesException($context['student']);
+            throw new ActiveGradesException($decoded['pchError']);
         }
 
         // Map object data

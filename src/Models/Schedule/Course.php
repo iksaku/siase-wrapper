@@ -67,29 +67,6 @@ class Course extends Model
     protected $room;
 
     /**
-     * Course constructor.
-     * @param int $id
-     * @param string $name
-     * @param string $shortName
-     * @param int[] $days
-     * @param string $startsAt
-     * @param string $endsAt
-     * @param int $group
-     * @param string $room
-     */
-    public function __construct(int $id, string $name, string $shortName, array $days, string $startsAt, string $endsAt, int $group, string $room)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->shortName = $shortName;
-        $this->days = $days;
-        $this->startsAt = $startsAt;
-        $this->endsAt = $endsAt;
-        $this->group = $group;
-        $this->room = $room;
-    }
-
-    /**
      * @param $name
      * @param $arguments
      * @return bool

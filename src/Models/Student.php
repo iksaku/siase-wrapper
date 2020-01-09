@@ -20,23 +20,6 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 class Student extends Model
 {
     /**
-     * Student constructor.
-     * @param int $id
-     * @param string $name
-     * @param string $token
-     * @param Career[] $careers
-     * @param Career|null $currentCareer
-     */
-    public function __construct(int $id, string $name, string $token, array $careers = [], Career $currentCareer = null)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->token = $token;
-        $this->careers = $careers;
-        $this->currentCareer = $currentCareer;
-    }
-
-    /**
      * @return array
      */
     protected static function getEncoders(): array
@@ -87,10 +70,19 @@ class Student extends Model
 
         $promises = [];
 
-        foreach ($data as $d) {
-            $method = 'request'.ucfirst($d);
+        foreach ($data as $key => $career) {
+            if (!is_string($key)) {
+                $key = $career;
+                $career = null;
+            }
+
+            if (empty($career)) {
+                $career = $this->getCurrentCareer();
+            }
+
+            $method = 'request'.ucfirst($key);
             if (method_exists($this, $method)) {
-                $promises[] = $this->$method();
+                $promises[] = $this->$method($career);
             }
         }
 
@@ -212,7 +204,7 @@ class Student extends Model
 
     /**
      * Active Grades of Student.
-     * @var ActiveGrades
+     * @var ActiveGrades|null
      */
     protected $activeGrades;
 
@@ -272,17 +264,18 @@ class Student extends Model
 
     /**
      * Kardex of Student.
-     * @var Kardex
+     * @var Kardex[]|null
      */
     protected $kardex;
 
     /**
+     * @param Career $career
      * @return Promise
      */
-    protected function requestKardex(): Promise
+    protected function requestKardex(Career $career): Promise
     {
         /** @var Promise $promise */
-        $promise = new Promise(function () use (&$promise) {
+        $promise = new Promise(function () use (&$promise, $career) {
             if ($this->getKardex() !== null) {
                 $promise->resolve($this->getKardex());
 
@@ -293,10 +286,10 @@ class Student extends Model
                 'query' => [
                     RequestArgument::REQUEST_TYPE => RequestType::KARDEX,
                     RequestArgument::STUDENT_ID => $this->getId(),
-                    RequestArgument::STUDENT_CAREER_CVE => $this->getCurrentCareer()->getCve(),
+                    RequestArgument::STUDENT_CAREER_CVE => $career->getCve(),
                 ],
             ])
-                ->then(function (ResponseInterface $response) use ($promise) {
+                ->then(function (ResponseInterface $response) use ($promise, $career) {
                     /** @var Kardex $kardex */
                     $kardex = Kardex::getSerializer()->deserialize(
                         $response->getBody()->getContents(),
@@ -305,7 +298,7 @@ class Student extends Model
                         ['student' => $this]
                     );
 
-                    $this->setKardex($kardex);
+                    $this->setKardex($kardex, $career);
 
                     $promise->resolve($kardex);
                 })
@@ -316,24 +309,30 @@ class Student extends Model
     }
 
     /**
-     * @return Kardex|null
+     * @param Career|null $career
+     * @return Kardex|Kardex[]|null
      */
-    public function getKardex()
+    public function getKardex(Career $career = null)
     {
+        if (!empty($career)) {
+            return $this->kardex[$career->getCve()];
+        }
+
         return $this->kardex;
     }
 
     /**
      * @param Kardex $kardex
+     * @param Career $career
      */
-    public function setKardex(Kardex $kardex)
+    public function setKardex(Kardex $kardex, Career $career)
     {
-        $this->kardex = $kardex;
+        $this->kardex[$career->getCve()] = $kardex;
     }
 
     /**
      * Currently active schedule of Student.
-     * @var Schedule
+     * @var Schedule|null
      */
     protected $schedule;
 
@@ -390,5 +389,10 @@ class Student extends Model
     public function setSchedule(Schedule $schedule)
     {
         $this->schedule = $schedule;
+    }
+
+    public function getMeh()
+    {
+        return 'meh';
     }
 }

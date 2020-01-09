@@ -14,15 +14,6 @@ class Kardex extends Model
     protected $grades;
 
     /**
-     * Kardex constructor.
-     * @param Grade[] $grades
-     */
-    public function __construct(array $grades)
-    {
-        $this->grades = $grades;
-    }
-
-    /**
      * @return array
      */
     protected static function getEncoders(): array

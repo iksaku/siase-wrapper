@@ -26,19 +26,6 @@ class Career extends Model
     protected $shortName;
 
     /**
-     * Career constructor.
-     * @param string $cve
-     * @param string $name
-     * @param string $shortName
-     */
-    public function __construct(string $cve, string $name, string $shortName)
-    {
-        $this->name = $name;
-        $this->shortName = $shortName;
-        $this->cve = $cve;
-    }
-
-    /**
      * @return string
      */
     public function getCve(): string
