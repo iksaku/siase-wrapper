@@ -276,7 +276,7 @@ class Student extends Model
     {
         /** @var Promise $promise */
         $promise = new Promise(function () use (&$promise, $career) {
-            if ($this->getKardex() !== null) {
+            if ($this->getKardex($career) !== null) {
                 $promise->resolve($this->getKardex());
 
                 return;
