@@ -1,11 +1,11 @@
 <?php
 
-namespace iksaku\SIASE\Models\ActiveGrades;
+namespace iksaku\SIASE\Models\LatestGrades;
 
-use iksaku\SIASE\Encoders\ActiveGradesEncoder;
+use iksaku\SIASE\Encoders\LatestGradesEncoder;
 use iksaku\SIASE\Models\Model;
 
-class ActiveGrades extends Model
+class LatestGrades extends Model
 {
     /**
      * @return array
@@ -13,7 +13,7 @@ class ActiveGrades extends Model
     protected static function getEncoders(): array
     {
         return array_merge([
-            new ActiveGradesEncoder(),
+            new LatestGradesEncoder(),
         ], parent::getEncoders());
     }
 

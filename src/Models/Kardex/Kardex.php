@@ -9,7 +9,7 @@ class Kardex extends Model
 {
     /**
      * List of grades in the Kardex.
-     * @var Grade[]
+     * @var KardexGrade[]
      */
     protected $grades;
 
@@ -24,7 +24,7 @@ class Kardex extends Model
     }
 
     /**
-     * @return Grade[]
+     * @return KardexGrade[]
      */
     public function getGrades(): array
     {
@@ -32,7 +32,7 @@ class Kardex extends Model
     }
 
     /**
-     * @param Grade[] $grades
+     * @param KardexGrade[] $grades
      */
     public function setGrades(array $grades)
     {

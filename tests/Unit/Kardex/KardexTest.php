@@ -2,8 +2,8 @@
 
 namespace iksaku\SIASE\Tests\Unit\Kardex;
 
-use iksaku\SIASE\Models\Kardex\Grade;
 use iksaku\SIASE\Models\Kardex\Kardex;
+use iksaku\SIASE\Models\Kardex\KardexGrade;
 use iksaku\SIASE\Tests\Unit\TestCase;
 
 class KardexTest extends TestCase
@@ -13,27 +13,21 @@ class KardexTest extends TestCase
      */
     public function kardex_provider(): array
     {
-        return [
-            [
-                $grades = [],
-                new Kardex($grades),
-            ],
-        ];
+        return array_map(function (Kardex $kardex) {
+            return compact('kardex');
+        }, factory()->create(Kardex::class, 3));
     }
 
     /**
-     * @param Grade[] $grades
      * @param Kardex $kardex
      * @dataProvider kardex_provider
      */
-    public function test_kardex_grades(array $grades, Kardex $kardex)
+    public function test_kardex_grades(Kardex $kardex)
     {
-        $this->assertSame($grades, $kardex->getGrades());
+        $this->assertEmpty($kardex->getGrades());
 
-        $kardex->setGrades($grades = [
-            new Grade('First Course', 70, 1),
-            new Grade('Second Course', 80, 2),
-        ]);
+        $kardex->setGrades($grades = factory()->create(KardexGrade::class, 2));
+        sort($grades, SORT_REGULAR);
         $this->assertSame($grades, $kardex->getGrades());
     }
 }

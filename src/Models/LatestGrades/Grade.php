@@ -1,6 +1,6 @@
 <?php
 
-namespace iksaku\SIASE\Models\ActiveGrades;
+namespace iksaku\SIASE\Models\LatestGrades;
 
 use iksaku\SIASE\Models\Model;
 

@@ -4,172 +4,139 @@
 
 namespace iksaku\SIASE\Tests\Unit;
 
-use iksaku\SIASE\Models\ActiveGrades\ActiveGrades;
 use iksaku\SIASE\Models\Career;
-use iksaku\SIASE\Models\Kardex\Grade;
 use iksaku\SIASE\Models\Kardex\Kardex;
+use iksaku\SIASE\Models\LatestGrades\LatestGrades;
 use iksaku\SIASE\Models\Schedule\Schedule;
 use iksaku\SIASE\Models\Student;
 
 class StudentTest extends TestCase
 {
     /**
-     * @return array[]
+     * @return array
      */
     public function student_provider(): array
     {
-        $faker = $this->getFaker();
-
-        return [
-            [
-                $id = $faker->numberBetween(),
-                $name = $faker->name,
-                $trim = (string) $faker->numberBetween(),
-                $careers = [],
-                new Student($id, $name, $trim, $careers),
-            ],
-        ];
+        return array_map(function (Student $student) {
+            return compact('student');
+        }, factory()->create(Student::class, 3));
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_id(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_id(Student $student)
     {
-        $this->assertSame($id, $student->getId());
+        $this->assertIsInt($student->getId());
 
         $student->setId($id = $this->getFaker()->numberBetween());
         $this->assertSame($id, $student->getId());
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_name(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_name(Student $student)
     {
-        $this->assertSame($name, $student->getName());
+        $this->assertIsString($student->getName());
 
         $student->setName($name = $this->getFaker()->name);
         $this->assertSame($name, $student->getName());
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_trim(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_trim(Student $student)
     {
-        $this->assertSame($trim, $student->getToken());
+        $this->assertIsString($student->getToken());
 
         $student->setToken($trim = (string) $this->getFaker()->numberBetween());
         $this->assertSame($trim, $student->getToken());
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_careers(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_careers(Student $student)
     {
-        $this->assertSame($careers, $student->getCareers());
+        $this->assertIsArray($student->getCareers());
         $this->assertEmpty($student->getCareers());
 
-        $student->setCareers($careers = [
-            new Career('', 'Magical Career', 'mc'),
-        ]);
+        $student->setCareers($careers = factory()->create(Career::class));
         $this->assertSame($careers, $student->getCareers());
         $this->assertNotEmpty($student->getCareers());
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_current_career(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_current_career(Student $student)
     {
         $this->assertEmpty($student->getCurrentCareer());
 
-        $student->setCareers($careers = [
-            new Career('', 'Imaginary Career', 'ic'),
-            new Career('', 'Second Imaginary Career', 'sic'),
-        ]);
-        $this->assertSame($careers[1], $student->getCurrentCareer());
+        $student->setCareers($careers = factory()->create(Career::class, 2));
+        $this->assertSame(array_value_last($careers), $student->getCurrentCareer());
 
-        $student->setCurrentCareer($new_career = new Career('', 'New Career', 'nc'));
+        $student->setCurrentCareer(
+            $new_career = array_value_first(factory()->create(Career::class))
+        );
         $this->assertSame($new_career, $student->getCurrentCareer());
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param array $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_active_grades(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_active_grades(Student $student)
     {
-        $this->assertEmpty($student->getActiveGrades());
+        $this->assertEmpty($student->getLatestGrades());
 
-        $student->setActiveGrades($activeGrades = new ActiveGrades([
-            new Grade('Dark Nebula', 100, 1),
-        ]));
-        $this->assertSame($activeGrades, $student->getActiveGrades());
+        $student->setLatestGrades(
+            $activeGrades = array_value_first(factory()->create(LatestGrades::class))
+        );
+        $this->assertSame($activeGrades, $student->getLatestGrades());
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_kardex(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_kardex(Student $student)
     {
-        $this->assertEmpty($student->getKardex(false));
+        $this->assertEmpty($student->getKardex());
 
-        $student->setKardex($kardex = new Kardex([
-            new Grade('Party Hard', 101, 0),
-        ]));
-        $this->assertSame($kardex, $student->getKardex(false));
+        $student->setCareers(factory()->create(Career::class, 2));
+
+        $student->setKardex(
+            $firstKardex = array_value_first(factory()->create(Kardex::class)),
+            $firstCareer = array_value_first($student->getCareers())
+        );
+        $this->assertSame($firstKardex, $student->getKardex($firstCareer));
+
+        $student->setKardex(
+            $secondKardex = array_value_first(factory()->create(Kardex::class)),
+            $lastCareer = array_value_last($student->getCareers())
+        );
+        $this->assertSame($secondKardex, $student->getKardex($lastCareer));
     }
 
     /**
-     * @param int $id
-     * @param string $name
-     * @param string $trim
-     * @param Career[] $careers
      * @param Student $student
      * @dataProvider student_provider
      */
-    public function test_student_schedule(int $id, string $name, string $trim, array $careers, Student $student)
+    public function test_student_schedule(Student $student)
     {
         $this->assertEmpty($student->getSchedule());
 
-        $student->setSchedule($schedule = new Schedule([], '0-Infinity'));
+        $student->setSchedule(
+            $schedule = array_value_first(factory()->create(Schedule::class))
+        );
         $this->assertSame($schedule, $student->getSchedule());
     }
 }

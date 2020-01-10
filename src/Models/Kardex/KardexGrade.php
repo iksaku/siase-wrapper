@@ -4,7 +4,7 @@ namespace iksaku\SIASE\Models\Kardex;
 
 use iksaku\SIASE\Models\Model;
 
-class Grade extends Model
+class KardexGrade extends Model
 {
     /**
      * Course name.

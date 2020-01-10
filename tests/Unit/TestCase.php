@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 class TestCase extends PHPUnitTestCase
 {
     /** @var Generator */
-    private $faker;
+    private static $faker;
 
     /**
      * @return Generator
@@ -17,9 +17,9 @@ class TestCase extends PHPUnitTestCase
     public function getFaker(): Generator
     {
         if (empty($this->faker)) {
-            $this->faker = Factory::create('es_ES');
+            self::$faker = Factory::create('es_ES');
         }
 
-        return $this->faker;
+        return self::$faker;
     }
 }

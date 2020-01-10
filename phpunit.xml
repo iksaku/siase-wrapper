@@ -12,14 +12,17 @@
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
 
-            <file>CareerTest.php</file>
-            <file>StudentTest.php</file>
-
-            <file>Kardex/GradeTest.php</file>
+            <file>Kardex/KardexGradeTest.php</file>
             <file>Kardex/KardexTest.php</file>
 
-            <file>Schedule/PeriodCourseTest.php</file>
+            <file>LatestGrades/GradeTest.php</file>
+            <file>LatestGrades/LatestGradesTest.php</file>
+
+            <file>Schedule/CourseTest.php</file>
             <file>Schedule/ScheduleTest.php</file>
+
+            <file>CareerTest.php</file>
+            <file>StudentTest.php</file>
         </testsuite>
 
         <testsuite name="Functional">

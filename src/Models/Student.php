@@ -8,8 +8,8 @@ use iksaku\SIASE\Api\RequestArgument;
 use iksaku\SIASE\Api\RequestType;
 use iksaku\SIASE\Encoders\StudentEncoder;
 use iksaku\SIASE\Exceptions\LoginException;
-use iksaku\SIASE\Models\ActiveGrades\ActiveGrades;
 use iksaku\SIASE\Models\Kardex\Kardex;
+use iksaku\SIASE\Models\LatestGrades\LatestGrades;
 use iksaku\SIASE\Models\Schedule\Schedule;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -204,19 +204,19 @@ class Student extends Model
 
     /**
      * Active Grades of Student.
-     * @var ActiveGrades|null
+     * @var LatestGrades|null
      */
-    protected $activeGrades;
+    protected $latestGrades;
 
     /**
      * @return Promise
      */
-    protected function requestActiveGrades(): Promise
+    protected function requestLatestGrades(): Promise
     {
         /** @var Promise $promise */
         $promise = new Promise(function () use (&$promise) {
-            if ($this->getActiveGrades() !== null) {
-                $promise->resolve($this->getActiveGrades());
+            if ($this->getLatestGrades() !== null) {
+                $promise->resolve($this->getLatestGrades());
 
                 return;
             }
@@ -229,17 +229,17 @@ class Student extends Model
                 ],
             ])
                 ->then(function (ResponseInterface $response) use ($promise) {
-                    /** @var ActiveGrades $activeGrades */
-                    $activeGrades = ActiveGrades::getSerializer()->deserialize(
+                    /** @var LatestGrades $latestGrades */
+                    $latestGrades = LatestGrades::getSerializer()->deserialize(
                         $response->getBody()->getContents(),
-                        ActiveGrades::class,
+                        LatestGrades::class,
                         'xml',
                         ['student' => $this]
                     );
 
-                    $this->setActiveGrades($activeGrades);
+                    $this->setLatestGrades($latestGrades);
 
-                    $promise->resolve($activeGrades);
+                    $promise->resolve($latestGrades);
                 })->wait();
         });
 
@@ -247,19 +247,19 @@ class Student extends Model
     }
 
     /**
-     * @return ActiveGrades|null
+     * @return LatestGrades|null
      */
-    public function getActiveGrades()
+    public function getLatestGrades()
     {
-        return $this->activeGrades;
+        return $this->latestGrades;
     }
 
     /**
-     * @param ActiveGrades $activeGrades
+     * @param LatestGrades $latestGrades
      */
-    public function setActiveGrades(ActiveGrades $activeGrades): void
+    public function setLatestGrades(LatestGrades $latestGrades): void
     {
-        $this->activeGrades = $activeGrades;
+        $this->latestGrades = $latestGrades;
     }
 
     /**

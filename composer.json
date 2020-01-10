@@ -19,7 +19,8 @@
         "ext-json": "*",
         "symfony/serializer": "^5.0",
         "symfony/property-info": "^5.0",
-        "symfony/property-access": "^5.0"
+        "symfony/property-access": "^5.0",
+        "symfony/finder": "^5.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",

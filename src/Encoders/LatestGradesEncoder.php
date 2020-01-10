@@ -2,10 +2,10 @@
 
 namespace iksaku\SIASE\Encoders;
 
-use iksaku\SIASE\Exceptions\ActiveGradesException;
+use iksaku\SIASE\Exceptions\LatestGradesException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
-class ActiveGradesEncoder extends XmlEncoder
+class LatestGradesEncoder extends XmlEncoder
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class ActiveGradesEncoder extends XmlEncoder
 
         // Look for Active Grades errors
         if (filter_var($decoded['plgError'], FILTER_VALIDATE_BOOLEAN)) {
-            throw new ActiveGradesException($decoded['pchError']);
+            throw new LatestGradesException($decoded['pchError']);
         }
 
         // Map object data
