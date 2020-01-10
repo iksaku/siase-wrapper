@@ -4,13 +4,26 @@ on: [push]
 
 jobs:
   test:
-    name: 'Package Tests'
-    runs-on: ubuntu-latest
+    name: P${{ matrix.php }} - ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        php: [7.4, 7.3]
+        os: [ubuntu-latest, windows-latest]
+
     steps:
     - name: Checkout
       uses: actions/checkout@v1
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v1
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: mbstring, json, xml
+        coverage: none
     - name: Composer Install
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+      run: composer install --no-interaction --no-progress --no-scripts --no-suggest --prefer-dist
     - name: Style Check
       run: composer test:lint
     - name: Unit Tests
