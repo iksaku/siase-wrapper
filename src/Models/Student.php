@@ -329,15 +329,11 @@ class Student extends Model
 
     /**
      * @param Career|null $career
-     * @return Kardex|Kardex[]|null
+     * @return Kardex|null
      */
-    public function getKardex(Career $career = null)
+    public function getKardex(Career $career)
     {
-        if (!empty($career) && isset($this->kardex[$career->getCve()])) {
-            return $this->kardex[$career->getCve()];
-        }
-
-        return $this->kardex;
+        return $this->kardex[$career->getCve()] ?? null;
     }
 
     /**
