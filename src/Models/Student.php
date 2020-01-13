@@ -70,23 +70,34 @@ class Student extends Model
 
         $promises = [];
 
-        foreach ($data as $key => $career) {
-            if (!is_string($key)) {
-                $key = $career;
-                $career = null;
+        foreach ($data as $method => $careers) {
+            if (!is_string($method)) {
+                $method = $careers;
+                $careers = null;
             }
 
-            if (empty($career)) {
-                $career = $this->getCurrentCareer();
+            if (empty($careers)) {
+                $careers = [$this->getCurrentCareer()];
+            } elseif (!is_array($careers)) {
+                $careers = [$careers];
             }
 
-            $method = 'request'.ucfirst($key);
+            $method = 'request'.ucfirst($method);
+
             if (method_exists($this, $method)) {
-                $promises[] = $this->$method($career);
+                $method_promises = $this->$method($careers);
+
+                if (!is_array($method_promises)) {
+                    $method_promises = [$method_promises];
+                }
+
+                array_push($promises, ...$method_promises);
             }
         }
 
         settle($promises)->wait(false);
+
+        var_dump($promises);
 
         return $this;
     }
@@ -269,43 +280,51 @@ class Student extends Model
     protected $kardex;
 
     /**
-     * @param Career $career
-     * @return Promise
+     * @param Career|Career[] $careers
+     * @return Promise[]
      */
-    protected function requestKardex(Career $career): Promise
+    protected function requestKardex(array $careers): array
     {
-        /** @var Promise $promise */
-        $promise = new Promise(function () use (&$promise, $career) {
-            if ($this->getKardex($career) !== null) {
-                $promise->resolve($this->getKardex());
+        $promises = [];
 
-                return;
-            }
+        foreach ($careers as $career) {
+            $index = count($promises);
 
-            client()->getAsync('', [
-                'query' => [
-                    RequestArgument::REQUEST_TYPE => RequestType::KARDEX,
-                    RequestArgument::STUDENT_ID => $this->getId(),
-                    RequestArgument::STUDENT_CAREER_CVE => $career->getCve(),
-                ],
-            ])
-                ->then(function (ResponseInterface $response) use ($promise, $career) {
-                    /** @var Kardex $kardex */
-                    $kardex = Kardex::getSerializer()->deserialize(
-                        $response->getBody()->getContents(),
-                        Kardex::class,
-                        'xml',
-                        ['student' => $this]
-                    );
+            /* @var Promise $promise */
+            $promises[$index] = new Promise(function () use (&$promises, $index, $career) {
+                $promise = $promises[$index];
 
-                    $this->setKardex($kardex, $career);
+                if ($this->getKardex($career) !== null) {
+                    $promise->resolve($this->getKardex());
 
-                    $promise->resolve($kardex);
-                })
-                ->wait();
-        });
+                    return;
+                }
 
-        return $promise;
+                client()->getAsync('', [
+                    'query' => [
+                        RequestArgument::REQUEST_TYPE => RequestType::KARDEX,
+                        RequestArgument::STUDENT_ID => $this->getId(),
+                        RequestArgument::STUDENT_CAREER_CVE => $career->getCve(),
+                    ],
+                ])
+                    ->then(function (ResponseInterface $response) use ($promise, $career) {
+                        /** @var Kardex $kardex */
+                        $kardex = Kardex::getSerializer()->deserialize(
+                            $response->getBody()->getContents(),
+                            Kardex::class,
+                            'xml',
+                            ['student' => $this]
+                        );
+
+                        $this->setKardex($kardex, $career);
+
+                        $promise->resolve($kardex);
+                    })
+                    ->wait();
+            });
+        }
+
+        return $promises;
     }
 
     /**
@@ -314,7 +333,7 @@ class Student extends Model
      */
     public function getKardex(Career $career = null)
     {
-        if (!empty($career)) {
+        if (!empty($career) && isset($this->kardex[$career->getCve()])) {
             return $this->kardex[$career->getCve()];
         }
 
