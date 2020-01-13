@@ -97,8 +97,6 @@ class Student extends Model
 
         settle($promises)->wait(false);
 
-        var_dump($promises);
-
         return $this;
     }
 
@@ -404,10 +402,5 @@ class Student extends Model
     public function setSchedule(Schedule $schedule)
     {
         $this->schedule = $schedule;
-    }
-
-    public function getMeh()
-    {
-        return 'meh';
     }
 }
