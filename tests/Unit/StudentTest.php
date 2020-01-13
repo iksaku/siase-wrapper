@@ -109,8 +109,6 @@ class StudentTest extends TestCase
      */
     public function test_student_kardex(Student $student)
     {
-        $this->assertEmpty($student->getKardex());
-
         $student->setCareers(factory()->create(Career::class, 2));
 
         $student->setKardex(
