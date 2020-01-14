@@ -312,7 +312,7 @@ class Student extends Model
                 $promise = $promises[$index];
 
                 if ($this->getKardex($career) !== null) {
-                    $promise->resolve($this->getKardex());
+                    $promise->resolve($this->getKardex($career));
 
                     return;
                 }
