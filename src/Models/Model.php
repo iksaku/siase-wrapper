@@ -79,16 +79,26 @@ abstract class Model implements JsonSerializable, Serializable
      * @return string
      * @throws ExceptionInterface
      */
-    public function serialize()
+    public function serialize(): string
     {
-        return serialize($this->toArray());
+        $object = clone $this;
+        $this->onSerialize($object);
+
+        return serialize($object->toArray());
+    }
+
+    /**
+     * @param Model $model
+     */
+    protected function onSerialize($model): void
+    {
     }
 
     /**
      * @param string $serialized
      * @throws ExceptionInterface
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         $data = unserialize($serialized);
 

@@ -30,6 +30,25 @@ class Student extends Model
     }
 
     /**
+     * @param Student $student
+     */
+    protected function onSerialize($student): void
+    {
+        $student->currentCareer = null;
+    }
+
+    /**
+     * @param string $serialized
+     * @throws ExceptionInterface
+     */
+    public function unserialize($serialized): void
+    {
+        parent::unserialize($serialized);
+
+        $this->setCurrentCareer(array_value_last($this->getCareers()));
+    }
+
+    /**
      * @param int $id
      * @param string $password
      * @return Student
