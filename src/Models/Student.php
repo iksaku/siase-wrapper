@@ -331,7 +331,7 @@ class Student extends Model
      */
     public function getKardex(Career $career)
     {
-        return $this->kardex[$career->getCve()] ?? null;
+        return $this->kardex[hexdec($career->getCve())] ?? null;
     }
 
     /**
@@ -340,7 +340,7 @@ class Student extends Model
      */
     public function setKardex(Kardex $kardex, Career $career)
     {
-        $this->kardex[$career->getCve()] = $kardex;
+        $this->kardex[hexdec($career->getCve())] = $kardex;
     }
 
     /**

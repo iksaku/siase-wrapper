@@ -3,9 +3,11 @@
 namespace iksaku\SIASE\Models;
 
 use JsonSerializable;
+use Serializable;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -13,7 +15,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Class Model.
  */
-abstract class Model implements JsonSerializable
+abstract class Model implements JsonSerializable, Serializable
 {
     /**
      * @return array
@@ -74,11 +76,24 @@ abstract class Model implements JsonSerializable
     }
 
     /**
-     * @return array
+     * @return string
      * @throws ExceptionInterface
      */
-    public function __debugInfo()
+    public function serialize()
     {
-        return $this->toArray();
+        return serialize($this->toArray());
+    }
+
+    /**
+     * @param string $serialized
+     * @throws ExceptionInterface
+     */
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        self::getSerializer()->denormalize($data, static::class, null, [
+            AbstractNormalizer::OBJECT_TO_POPULATE => $this,
+        ]);
     }
 }
