@@ -35,6 +35,15 @@ class KardexEncoder extends XmlEncoder
             ];
         }, $decoded['ttKdx']['ttKdxRow']);
 
+        usort($decoded['ttKdx']['ttKdxRow'], function ($a, $b) {
+            $bySemester = $a['semester'] <=> $b['semester'];
+            if ($bySemester !== 0) {
+                return $bySemester;
+            }
+
+            return $a['courseName'] <=> $b['courseName'];
+        });
+
         // Return decoded data
         return $data;
     }
