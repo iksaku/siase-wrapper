@@ -25,16 +25,20 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",
         "phpunit/phpunit": "^8.3",
-        "fzaninotto/faker": "^1.9"
+        "fzaninotto/faker": "^1.9",
+        "brainmaestro/composer-git-hooks": "^2.8"
     },
     "extra": {
         "hooks": {
             "pre-commit": [
-                "@php ./vendor/bin/php-cs-fixer fix"
+                "composer lint",
+                "git update-index --again"
             ],
             "pre-push": [
-                "@php ./vendor/bin/php-cs-fixer fix --dry-run",
-                "@php ./vendor/bin/phpunit"
+                "composer test"
+            ],
+            "post-merge": [
+                "composer install"
             ]
         }
     },
@@ -52,6 +56,15 @@
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "iksaku\\SIASE\\Composer\\Scripts::devOnly",
+            "cghooks add --ignore-lock"
+        ],
+        "post-update-cmd": [
+            "iksaku\\SIASE\\Composer\\Scripts::devOnly",
+            "cghooks update"
+        ],
+
         "lint": "php-cs-fixer fix",
         "test:lint": "@lint --dry-run",
         "test:unit": "phpunit",
