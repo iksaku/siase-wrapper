@@ -26,7 +26,8 @@
         "friendsofphp/php-cs-fixer": "^2.15",
         "phpunit/phpunit": "^8.3",
         "fzaninotto/faker": "^1.9",
-        "brainmaestro/composer-git-hooks": "^2.8"
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "nunomaduro/collision": "^4.1"
     },
     "extra": {
         "hooks": {

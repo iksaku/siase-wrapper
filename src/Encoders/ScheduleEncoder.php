@@ -46,6 +46,7 @@ class ScheduleEncoder extends XmlEncoder
                 ],
                 'startsAt' => $courseData['HoraInicio'],
                 'endsAt' => $courseData['HoraFin'],
+                'numberOfClasses' => 0,
                 'group' => (int) $courseData['Grupo'],
                 'room' => $courseData['Salon'],
             ];

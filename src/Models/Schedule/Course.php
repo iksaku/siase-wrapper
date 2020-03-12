@@ -3,6 +3,7 @@
 namespace iksaku\SIASE\Models\Schedule;
 
 use BadMethodCallException;
+use Carbon\Carbon;
 use iksaku\SIASE\Models\Model;
 
 /**
@@ -53,6 +54,11 @@ class Course extends Model
      * @var string
      */
     protected $endsAt;
+
+    /**
+     * @var int
+     */
+    protected $numberOfClasses;
 
     /**
      * Group number to which the Student belongs.
@@ -179,6 +185,21 @@ class Course extends Model
     public function setEndsAt(string $endsAt)
     {
         $this->endsAt = $endsAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfClasses(): int
+    {
+        if (empty($this->numberOfClasses)) {
+            $start = Carbon::createFromFormat('H:i', $this->getStartsAt());
+            $end = Carbon::createFromFormat('H:i', $this->getEndsAt());
+
+            $this->numberOfClasses = $start->diffInMinutes($end) / 50; // Class duration.
+        }
+
+        return $this->numberOfClasses;
     }
 
     /**

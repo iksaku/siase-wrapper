@@ -27,7 +27,13 @@ if (!function_exists('array_value_first')) {
      */
     function array_value_first($array)
     {
-        return $array[array_key_first($array)];
+        $key = array_key_first($array);
+
+        if ($key === null) {
+            return null;
+        }
+
+        return $array[$key];
     }
 }
 
@@ -38,7 +44,13 @@ if (!function_exists('array_value_last')) {
      */
     function array_value_last($array)
     {
-        return $array[array_key_last($array)];
+        $key = array_key_last($array);
+
+        if ($key === null) {
+            return null;
+        }
+
+        return $array[$key];
     }
 }
 

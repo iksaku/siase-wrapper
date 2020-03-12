@@ -2,12 +2,14 @@
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="vendor/autoload.php"
-         colors="true"
+         colors="always"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="false">
+         stopOnFailure="false"
+         printerClass="NunoMaduro\Collision\Adapters\Phpunit\Printer"
+>
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
