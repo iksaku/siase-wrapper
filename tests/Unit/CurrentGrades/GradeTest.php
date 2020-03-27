@@ -1,8 +1,8 @@
 <?php
 
-namespace iksaku\SIASE\Tests\Unit\LatestGrades;
+namespace iksaku\SIASE\Tests\Unit\CurrentGrades;
 
-use iksaku\SIASE\Models\LatestGrades\Grade;
+use iksaku\SIASE\Models\CurrentGrades\Grade;
 use iksaku\SIASE\Tests\Unit\TestCase;
 
 class GradeTest extends TestCase

@@ -2,11 +2,11 @@
 
 use Faker\Generator as Faker;
 use iksaku\SIASE\Factories\Factory;
-use iksaku\SIASE\Models\LatestGrades\LatestGrades;
+use iksaku\SIASE\Models\CurrentGrades\CurrentGrades;
 
 /* @var Factory $factory */
 
-$factory->define(LatestGrades::class, function (Faker $faker) {
+$factory->define(CurrentGrades::class, function (Faker $faker) {
     return [
         'grades' => [],
     ];

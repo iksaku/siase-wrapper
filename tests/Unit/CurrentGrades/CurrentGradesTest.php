@@ -1,28 +1,28 @@
 <?php
 
-namespace iksaku\SIASE\Tests\Unit\LatestGrades;
+namespace iksaku\SIASE\Tests\Unit\CurrentGrades;
 
-use iksaku\SIASE\Models\LatestGrades\Grade;
-use iksaku\SIASE\Models\LatestGrades\LatestGrades;
+use iksaku\SIASE\Models\CurrentGrades\CurrentGrades;
+use iksaku\SIASE\Models\CurrentGrades\Grade;
 use iksaku\SIASE\Tests\Unit\TestCase;
 
-class LatestGradesTest extends TestCase
+class CurrentGradesTest extends TestCase
 {
     /**
      * @return array
      */
     public function active_grades_provider(): array
     {
-        return array_map(function (LatestGrades $latestGrades) {
+        return array_map(function (CurrentGrades $latestGrades) {
             return compact('latestGrades');
-        }, factory()->create(LatestGrades::class, 3));
+        }, factory()->create(CurrentGrades::class, 3));
     }
 
     /**
-     * @param LatestGrades $activeGrades
+     * @param CurrentGrades $activeGrades
      * @dataProvider active_grades_provider
      */
-    public function test_active_grades(LatestGrades $activeGrades): void
+    public function test_active_grades(CurrentGrades $activeGrades): void
     {
         $this->assertEmpty($activeGrades->getGrades());
 

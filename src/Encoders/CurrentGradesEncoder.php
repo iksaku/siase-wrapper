@@ -2,10 +2,10 @@
 
 namespace iksaku\SIASE\Encoders;
 
-use iksaku\SIASE\Exceptions\LatestGradesException;
+use iksaku\SIASE\Exceptions\CurrentGradesException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
-class LatestGradesEncoder extends XmlEncoder
+class CurrentGradesEncoder extends XmlEncoder
 {
     /**
      * {@inheritdoc}
@@ -17,13 +17,24 @@ class LatestGradesEncoder extends XmlEncoder
 
         // Look for Active Grades errors
         if (filter_var($decoded['plgError'], FILTER_VALIDATE_BOOLEAN)) {
-            throw new LatestGradesException($decoded['pchError']);
+            throw new CurrentGradesException($decoded['pchError']);
+        }
+
+        if (!isset($decoded['ttCalif']['ttCalifRow'])) {
+            throw new EmptyGradesException($context['student']);
         }
 
         // Map object data
         $data = [
             'grades' => [],
         ];
+
+        // Hot-Fix in case there's only one course
+        if (isset($decoded['ttCalif']['ttCalifRow']['Materia'])) {
+            $decoded['ttCalif']['ttCalifRow'] = [
+                $decoded['ttCalif']['ttCalifRow'],
+            ];
+        }
 
         // Map grade data
         $data['grades'] = array_map(function ($gradeData) {

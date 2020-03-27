@@ -5,8 +5,8 @@
 namespace iksaku\SIASE\Tests\Unit;
 
 use iksaku\SIASE\Models\Career;
+use iksaku\SIASE\Models\CurrentGrades\CurrentGrades;
 use iksaku\SIASE\Models\Kardex\Kardex;
-use iksaku\SIASE\Models\LatestGrades\LatestGrades;
 use iksaku\SIASE\Models\Schedule\Schedule;
 use iksaku\SIASE\Models\Student;
 
@@ -95,12 +95,12 @@ class StudentTest extends TestCase
      */
     public function test_student_active_grades(Student $student)
     {
-        $this->assertEmpty($student->getLatestGrades());
+        $this->assertEmpty($student->getCurrentGrades());
 
-        $student->setLatestGrades(
-            $activeGrades = array_value_first(factory()->create(LatestGrades::class))
+        $student->setCurrentGrades(
+            $activeGrades = array_value_first(factory()->create(CurrentGrades::class))
         );
-        $this->assertSame($activeGrades, $student->getLatestGrades());
+        $this->assertSame($activeGrades, $student->getCurrentGrades());
     }
 
     /**

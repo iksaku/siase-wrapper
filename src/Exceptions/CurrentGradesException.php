@@ -5,7 +5,7 @@ namespace iksaku\SIASE\Exceptions;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Throwable;
 
-class LatestGradesException extends UnexpectedValueException
+class CurrentGradesException extends UnexpectedValueException
 {
     /**
      * ActiveGradesException constructor.

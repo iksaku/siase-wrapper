@@ -7,9 +7,11 @@ use function GuzzleHttp\Promise\settle;
 use iksaku\SIASE\Api\RequestArgument;
 use iksaku\SIASE\Api\RequestType;
 use iksaku\SIASE\Encoders\StudentEncoder;
+use iksaku\SIASE\Exceptions\EmptyGradesException;
+use iksaku\SIASE\Exceptions\EmptyScheduleException;
 use iksaku\SIASE\Exceptions\LoginException;
+use iksaku\SIASE\Models\CurrentGrades\CurrentGrades;
 use iksaku\SIASE\Models\Kardex\Kardex;
-use iksaku\SIASE\Models\LatestGrades\LatestGrades;
 use iksaku\SIASE\Models\Schedule\Schedule;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -232,19 +234,19 @@ class Student extends Model
 
     /**
      * Active Grades of Student.
-     * @var LatestGrades|null
+     * @var CurrentGrades|null
      */
-    protected $latestGrades;
+    protected $currentGrades;
 
     /**
      * @return Promise
      */
-    protected function requestLatestGrades(): Promise
+    protected function requestCurrentGrades(): Promise
     {
         /** @var Promise $promise */
         $promise = new Promise(function () use (&$promise) {
-            if ($this->getLatestGrades() !== null) {
-                $promise->resolve($this->getLatestGrades());
+            if ($this->getCurrentGrades() !== null) {
+                $promise->resolve($this->getCurrentGrades());
 
                 return;
             }
@@ -257,17 +259,23 @@ class Student extends Model
                 ],
             ])
                 ->then(function (ResponseInterface $response) use ($promise) {
-                    /** @var LatestGrades $latestGrades */
-                    $latestGrades = LatestGrades::getSerializer()->deserialize(
-                        $response->getBody()->getContents(),
-                        LatestGrades::class,
-                        'xml',
-                        ['student' => $this]
-                    );
+                    try {
+                        /** @var CurrentGrades $latestGrades */
+                        $latestGrades = CurrentGrades::getSerializer()->deserialize(
+                            $response->getBody()->getContents(),
+                            CurrentGrades::class,
+                            'xml',
+                            ['student' => $this]
+                        );
 
-                    $this->setLatestGrades($latestGrades);
+                        $this->setCurrentGrades($latestGrades);
 
-                    $promise->resolve($latestGrades);
+                        $promise->resolve($latestGrades);
+                    } catch (EmptyGradesException $e) {
+                        $this->setCurrentGrades(new CurrentGrades()); // Empty Current Grades...
+
+                        $promise->reject($e->getMessage());
+                    }
                 })->wait();
         });
 
@@ -275,19 +283,19 @@ class Student extends Model
     }
 
     /**
-     * @return LatestGrades|null
+     * @return CurrentGrades|null
      */
-    public function getLatestGrades()
+    public function getCurrentGrades()
     {
-        return $this->latestGrades;
+        return $this->currentGrades;
     }
 
     /**
-     * @param LatestGrades $latestGrades
+     * @param CurrentGrades $currentGrades
      */
-    public function setLatestGrades(LatestGrades $latestGrades): void
+    public function setCurrentGrades(CurrentGrades $currentGrades): void
     {
-        $this->latestGrades = $latestGrades;
+        $this->currentGrades = $currentGrades;
     }
 
     /**
@@ -389,17 +397,23 @@ class Student extends Model
                 ],
             ])
                 ->then(function (ResponseInterface $response) use ($promise) {
-                    /** @var Schedule $schedule */
-                    $schedule = Schedule::getSerializer()->deserialize(
-                        $response->getBody()->getContents(),
-                        Schedule::class,
-                        'xml',
-                        ['student' => $this]
-                    );
+                    try {
+                        /** @var Schedule $schedule */
+                        $schedule = Schedule::getSerializer()->deserialize(
+                            $response->getBody()->getContents(),
+                            Schedule::class,
+                            'xml',
+                            ['student' => $this]
+                        );
 
-                    $this->setSchedule($schedule);
+                        $this->setSchedule($schedule);
 
-                    $promise->resolve($schedule);
+                        $promise->resolve($schedule);
+                    } catch (EmptyScheduleException $e) {
+                        $this->setSchedule(new Schedule()); // Empty Schedule, for real...
+
+                        $promise->reject($e->getMessage());
+                    }
                 })
                 ->wait();
         });

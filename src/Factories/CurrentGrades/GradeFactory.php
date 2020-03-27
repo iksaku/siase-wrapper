@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 use iksaku\SIASE\Factories\Factory;
-use iksaku\SIASE\Models\LatestGrades\Grade;
+use iksaku\SIASE\Models\CurrentGrades\Grade;
 
 /* @var Factory $factory */
 

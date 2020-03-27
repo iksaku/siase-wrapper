@@ -2,6 +2,7 @@
 
 namespace iksaku\SIASE\Encoders;
 
+use iksaku\SIASE\Exceptions\EmptyScheduleException;
 use iksaku\SIASE\Exceptions\ScheduleException;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
@@ -21,21 +22,26 @@ class ScheduleEncoder extends XmlEncoder
             throw new ScheduleException($context['student']);
         }
 
+        if (!isset($decoded['ttHorario']['ttHorarioRow'])) {
+            throw new EmptyScheduleException($context['student']);
+        }
+
         // Map object data
         $data = [
             'period' => $decoded['pchPeriodo'],
             'courses' => [],
         ];
 
-        // Map course data
-        $decodedCourses = $decoded['ttHorario']['ttHorarioRow'];
-
-        if (isset($decodedCourses['Id'])) {
-            // Only one course found, convert it into single value array
-            $decodedCourses = [$decodedCourses];
+        // Hot-Fix in case there's only one course
+        if (isset($decoded['ttHorario']['ttHorarioRow']['Id'])) {
+            $decoded['ttHorario']['ttHorarioRow'] = [
+                $decoded['ttHorario']['ttHorarioRow'],
+            ];
         }
 
-        foreach ($decodedCourses as $courseData) {
+        // Map course data
+        // Need to Keep it as Foreach loop due to multiple rows representing the same Course
+        foreach ($decoded['ttHorario']['ttHorarioRow'] as $courseData) {
             // Map the course data as it would normally
             $mappedCourseData = [
                 'id' => $id = (int) $courseData['Id'],

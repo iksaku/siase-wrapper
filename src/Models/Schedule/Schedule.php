@@ -46,7 +46,7 @@ class Schedule extends Model
      * Contains a list of Courses to attend in the running Period.
      * @var Course[]
      */
-    protected $courses;
+    protected $courses = [];
 
     /**
      * @return Course[]
